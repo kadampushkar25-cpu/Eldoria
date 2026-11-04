@@ -1,12 +1,896 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Eldoria — Wildlands</title>
-<meta name="description" content="Explore Eldoria, a mysterious creature-adventure RPG filled with untamed lands, mythical beings, ancient secrets and hidden realms.">
-<meta name="theme-color" content="#101a17">
-</head>
-<body>
-<p>Game build upload placeholder.</p>
-</body>
-</html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tinywilds: Wildlands — Tournament & Mega Circuit Update</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:12px;background:#111b20;color:#eef6ed;font:15px system-ui,Segoe UI,sans-serif;display:flex;justify-content:center}main{width:min(100%,960px)}h1{font-size:1.45rem;margin:0}p{color:#b8c9c0;margin:.25rem 0 1rem}.shell{background:#18272b;border:1px solid #405c54;border-radius:14px;padding:10px;box-shadow:0 12px 35px #0006}canvas{display:block;width:100%;height:auto;aspect-ratio:16/10;image-rendering:pixelated;background:#9acb76;border-radius:8px;touch-action:none}#hud{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0}.pill{background:#263c39;border:1px solid #48645b;border-radius:999px;padding:5px 10px;font-size:13px}.member{background:#203934;border:1px solid #567568;border-radius:9px;color:#edf8ed;padding:7px 10px;font:12px system-ui;cursor:pointer;text-align:left}.member.active{border-color:#a5e18a;background:#315541}.member.waiting-selected{border-color:#f3d36c;background:#66572b}.member b{display:block;font-size:13px}.member small{color:#bdd4c6}.roster-actions{display:flex;gap:6px;margin:7px 0;flex-wrap:wrap}.roster-actions button{border:1px solid #58756a;background:#29443c;color:white;border-radius:8px;padding:8px 12px;cursor:pointer;font-weight:700}.roster-actions button:disabled{opacity:.4;cursor:not-allowed}.lower{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.msg{min-height:48px;color:#d9e7dc;padding:5px 2px;font-size:14px}.pad{display:grid;grid-template-columns:repeat(3,43px);gap:4px}.pad button,.action{border:1px solid #58756a;background:#29443c;color:white;border-radius:8px;padding:9px;cursor:pointer;font-weight:700;touch-action:manipulation}.pad button{height:40px}.pad button:active,.action:active{background:#4b7a61}.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.actions button{flex:1}.help{font-size:12px;color:#9fb4a8;margin-top:8px}.shop-panel{display:none;margin:10px 0;padding:12px;background:#203a30;border:1px solid #86a66c;border-radius:10px}.shop-panel.open{display:block}.chronicle-entry{padding:8px;border:1px solid #587568;border-radius:8px;background:#182e29}.chronicle-entry b{display:block;color:#e6efcf}.chronicle-entry small{color:#b9cabb}.shop-panel h2{font-size:1.05rem;margin:0 0 4px}.facility-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:9px 0}.facility-card{background:#182e29;border:1px solid #587568;border-radius:9px;padding:9px}.facility-card b{display:block;color:#e6efcf}.facility-card small{color:#b9cabb}.facility-controls{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.facility-controls select{flex:1;min-width:150px;background:#162a25;color:#eef6ed;border:1px solid #6f9276;border-radius:8px;padding:9px}.facility-entry{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px;border:1px solid #587568;border-radius:8px;background:#182e29}.facility-entry button{border:1px solid #6f9276;background:#315643;color:white;border-radius:7px;padding:6px 9px;cursor:pointer}.facility-entry button:disabled{opacity:.4}.leader-row{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;padding:9px;border:1px solid #587568;border-radius:8px;background:#182e29}.leader-row.player{border-color:#e6c86d;background:#3d3924}.leader-row b{display:block;color:#e6efcf}.leader-row small{color:#b9cabb}.leader-score{text-align:right;font-variant-numeric:tabular-nums}.leader-rank{font-weight:800;color:#e6c86d;text-align:center}@media(max-width:560px){.facility-grid{grid-template-columns:1fr}}.shop-panel p{font-size:13px;margin:0 0 9px}.shop-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.shop-items button{border:1px solid #6f9276;background:#315643;color:#f3f7e9;border-radius:8px;padding:10px;text-align:left;cursor:pointer;font:inherit}.shop-items button:disabled{opacity:.45;cursor:not-allowed}.shop-items b{display:block}.shop-items small{color:#c5ddc4}@media(max-width:560px){body{padding:5px}.shell{padding:6px}.lower{grid-template-columns:1fr}.pad{justify-content:center}.actions button{min-width:38%}}
+</style></head><body><main>
+<h1>🌿 Tinywilds: Wildlands — Tournament & Mega Circuit Update</h1>
+<p>A lightweight top-down creature adventure. Train and evolve your team, explore dense forests and distant coastlines, uncover the Forgotten Frontier, and discover creatures with distinct biological types and elemental affinities, and uncover the singular mystery of Wildcrown.</p>
+<div class="shell">
+<canvas id="game" width="800" height="500" aria-label="Top-down open world creature adventure"></canvas>
+<div id="hud"><span class="pill" id="region">Willow Meadow</span><span class="pill" id="team">Team: 1</span><span class="pill" id="coins">Coins: 0</span><span class="pill" id="party">Mossbit Lv. 5 · HP 20/20</span></div>
+<div id="shopPanel" class="shop-panel" aria-live="polite"><h2 id="shopTitle">🏪 Market</h2><p id="shopCoins">Available coins: 0</p><div class="shop-items"><button data-buy="1"><b>1 · Seed Orbs ×3</b><small>Cost: 6 coins</small></button><button data-buy="2"><b>2 · Healing Tonic</b><small>Cost: 8 coins · heal active creature</small></button><button data-buy="3"><b>3 · Power Charm</b><small>Cost: 12 coins · +2 power permanently</small></button><button data-buy="4"><b>4 · Team Expansion Permit</b><small>Cost: 30 coins · +1 team slot</small></button><button data-buy="5"><b>5 · Fire Stone</b><small>Cost: 40 coins · Ember evolution</small></button><button data-buy="6"><b>6 · Water Stone</b><small>Cost: 40 coins · Water evolution</small></button><button data-buy="7"><b>7 · Ice Stone</b><small>Cost: 40 coins · Ice evolution</small></button><button data-buy="8"><b>8 · Earth Stone</b><small>Cost: 40 coins · Earth evolution</small></button><button data-buy="9"><b>9 · Wood Stone</b><small>Cost: 40 coins · Wood evolution</small></button><button data-buy="10"><b>10 · Leaf Stone</b><small>Cost: 40 coins · Grass evolution</small></button><button data-buy="11"><b>11 · Thunder Stone</b><small>Cost: 40 coins · Lightning evolution</small></button><button data-buy="12"><b>12 · Dusk Stone</b><small>Cost: 40 coins · Shadow evolution</small></button></div><div class="facility-controls"><select id="evolutionStoneSelect" aria-label="Evolution stone in inventory"><option value="">Choose an owned evolution stone</option></select><button class="action" id="useEvolutionStone">Use on active creature</button></div><div style="margin-top:8px"><button class="action" id="closeShop">Close market (Esc)</button></div></div>
+<div id="megaLabPanel" class="shop-panel" aria-live="polite"><h2 id="megaLabTitle">🔬 Local Mega Evolution Lab</h2><p id="megaLabIntro">Local labs serve Common and Rare creatures. Legendary creatures require a specialist institute.</p><div class="facility-controls"><select id="megaCreatureSelect" aria-label="Choose a creature for Mega Stone research"></select><button class="action" id="refreshMegaLab">Inspect</button></div><div id="megaLabInfo" class="facility-card">Choose a creature to inspect its Mega Stones.</div><div class="shop-items"><button id="buyMegaX"><b>Buy Mega Stone X</b><small>Species-specific · 1,000 coins</small></button><button id="buyMegaY"><b>Buy Mega Stone Y</b><small>Species-specific · 1,000 coins</small></button></div><h3>🧪 Stored Mega Stones</h3><div id="megaStoneInventory" class="facility-grid"></div><h3>🧬 Artificial Mega-Evolution Experiments</h3><p>Contained research subjects undergoing supervised artificial Mega Evolution. These specimens are lab residents, not members of your collection and cannot be captured or removed.</p><div id="megaExperimentSubjects" class="facility-grid"></div><h3>🥚 Mega-Evolution Egg Study</h3><p>Eggs are monitored for unusual energy signatures. Their species and eventual traits are not guaranteed; the lab does not force Mega Evolution onto developing creatures.</p><div id="megaExperimentEggs" class="facility-grid"></div><button class="action" id="closeMegaLab">Close research lab</button></div>
+<div id="nurseryPanel" class="shop-panel" aria-live="polite">
+ <h2>🥚 Willow Breeding Nursery</h2>
+ <p>Pair two different eligible creatures here. Parents are cared for by the nursery while breeding and are returned to your waiting list when the egg is laid. Eggs incubate as you explore; offline time does not count.</p>
+ <div class="facility-controls"><select id="nurseryParentA" aria-label="First parent"></select><select id="nurseryParentB" aria-label="Second parent"></select><button class="action" id="startBreeding">Pair & begin breeding</button></div>
+ <div id="nurseryStatus" class="facility-card"></div>
+ <button class="action" id="closeNursery">Close nursery</button>
+</div>
+<div id="leaderboardPanel" class="shop-panel" aria-live="polite">
+ <h2>🏆 Tournament Leaderboards</h2>
+ <p>Compare your tournament record with the region’s established trainers. Each round win earns 3 points; winning a cup adds 6 bonus points and a title. Cups can be entered again after earning their badge.</p>
+ <div class="facility-controls"><select id="leaderboardCup" aria-label="Choose tournament leaderboard"><option value="willow">Willow Village Cup</option><option value="fernwood">Fernwood Elemental Cup</option><option value="mega">Moonlit Mega Masters</option><option value="frontier">Forgotten Frontier Invitational</option></select><button class="action" id="refreshLeaderboard">Refresh standings</button></div>
+ <div id="leaderboardSummary" class="facility-card"></div>
+ <div id="leaderboardRows" style="display:grid;gap:6px;margin-top:8px"></div>
+ <button class="action" id="closeLeaderboard" style="margin-top:9px">Close leaderboard</button>
+</div>
+<div id="tournamentEntryPanel" class="shop-panel" aria-live="polite">
+ <h2 id="tournamentEntryTitle">🏆 Tournament Hall</h2>
+ <p id="tournamentEntryInfo">Choose how you want to attend this tournament.</p>
+ <div id="tournamentBracketView" class="facility-card" style="display:grid;gap:7px;margin:8px 0"></div>
+ <div class="facility-controls">
+  <button class="action" id="enterAsParticipant">Enter as participant</button>
+  <button class="action" id="enterAsAudience">Attend as audience</button>
+ </div>
+ <button class="action" id="closeTournamentEntry" style="margin-top:8px">Leave tournament hall</button>
+</div>
+<div id="sanctuaryPanel" class="shop-panel" aria-live="polite">
+ <h2>🌳 Wildlands Sanctuary</h2>
+ <p>All habitat zones are available from the beginning. The caretaker handles routine care and habitat maintenance. Residents recover gradually and may form friendships, rivalries and familiar bonds.</p>
+ <div class="facility-grid" id="sanctuaryZones"></div>
+ <h3 style="font-size:1rem;margin:10px 0 4px">Admit a creature</h3>
+ <div class="facility-controls"><select id="sanctuaryCreature" aria-label="Creature to admit"></select><select id="sanctuaryZone" aria-label="Sanctuary habitat zone"></select><button class="action" id="admitSanctuary">Admit</button></div>
+ <h3 style="font-size:1rem;margin:10px 0 4px">Residents</h3><div id="sanctuaryResidents" style="display:grid;gap:6px"></div>
+ <h3 style="font-size:1rem;margin:10px 0 4px">Sanctuary Chronicle</h3><div id="sanctuaryLog" style="display:grid;gap:6px"></div>
+ <button class="action" id="closeSanctuary" style="margin-top:9px">Close sanctuary</button>
+</div>
+<div id="roster" style="display:flex;gap:7px;flex-wrap:wrap;margin:8px 0"></div><div class="help" id="elementCoverage"></div><div class="roster-actions"><button id="keepCreature">Keep next waiting</button><button id="swapWaiting">Add / swap selected waiting creature</button><button id="releaseCreature">Release selected creature</button></div><div id="waitingList" style="display:flex;gap:7px;flex-wrap:wrap;margin:6px 0"></div><div class="lower"><div class="msg" id="msg">Welcome to Wildlands! Find Elder Rowan in the village. Explore tall grass for wild encounters. Move with WASD or arrow keys.</div>
+<div class="pad"><span></span><button data-move="up">▲</button><span></span><button data-move="left">◀</button><button data-move="down">▼</button><button data-move="right">▶</button></div></div>
+<div class="actions"><button class="action" id="leaderboards">Tournament Leaderboards</button><button class="action" id="chronicles">Uncharted Chronicles</button><button class="action" id="interact">Interact (E)</button><button class="action" id="catch">Throw Seed Orb</button><button class="action" id="heal">Rest / Heal</button><button class="action" id="save">Save</button><button class="action" id="load">Load</button></div>
+<div id="chroniclePanel" class="shop-panel" style="display:none"><h2>📜 Uncharted Chronicles</h2><p id="chronicleSummary">Unknown places and unanswered questions.</p><div id="chronicleEntries" style="display:grid;gap:7px"></div><button class="action" id="closeChronicles" style="margin-top:9px">Close Chronicles</button></div><div id="moves" class="actions" style="display:none"><button class="action" data-moveidx="0">1 · Move</button><button class="action" data-moveidx="1">2 · Move</button><button class="action" data-moveidx="2">3 · Move</button><button class="action" data-moveidx="3">4 · Move</button></div><div class="help">WASD / arrows: move · E: talk, open, battle · C: catch wild creature · H: heal at a town/camp · J: open Uncharted Chronicles · P: pause battle-free exploration. Visit the Willow Breeding Nursery and Wildlands Sanctuary to manage breeding and habitat residents. Open Tournament Leaderboards to compare regional standings; cups can be replayed after earning their badges. Save is stored in this browser.</div>
+<div class="help"><b>Progression & economy:</b> Willow Village Cup costs 100 coins. Fernwood Elemental Cup costs 200 coins and requires the Willow Badge. Moonlit Mega Masters costs 700 coins and requires the Fernwood Crest; its opponents use boosted artificial Mega X/Y forms. Forgotten Frontier Invitational costs 500 coins and unlocks after the Ancient Guardian is defeated. Coins are earned only after wild encounters, trainer battles and tournament battles; there are no scattered coin pickups. Trial permits cost 150 / 200 / 250 coins and require the Fernwood Crest; Stormglass additionally requires Frostpeak, and Shadowfall requires both earlier trials. <b>Elements:</b> Fire, Water, Ice, Earth, Wood, Grass, Lightning and Shadow have matchup strengths. <b>Creature types:</b> Flying, Psychic and Bug are common types; Deep Sea and Mythical are rare types. Creature types are separate from elemental affinities and do not change elemental battle matchups. Each creature has four moves; use keys 1–4 or tap move buttons in battle. Creatures can faint at 0 HP; fainted creatures cannot fight and must be healed at a camp or in Willow Village. If your whole team faints, you lose the battle and must rest before fighting again. When your team is full, every new catch goes into a waiting list (nothing is overwritten). Keep next waiting adds the oldest waiting creature, replacing your selected creature only if the team is still full. Select a roster card before releasing a team member. Visit Willow Market or Fernwood Trading Post and press E to spend coins. Both markets sell eight elemental Evolution Stones for 40 coins each. Local Mega Evolution Labs in Willow Village and Moonlit Grove sell species-specific Mega Stone X and Y for 1,000 coins each to Common and Rare creatures. Legendary Mega Evolution is restricted to the specialist institute in the Forgotten Frontier, unlocked after defeating the Ancient Guardian; purchases are stored in its inventory. The lab also houses artificial Mega-form research specimens and monitored eggs. Wildcrown is excluded; select an owned stone in the market and use it on your active creature. A stone evolves a compatible species immediately, consumes one stone only on success, and does not work on species without a known evolution chain. A Team Expansion Permit costs 30 coins and adds one team slot (maximum 8). Enter village tournaments only after paying their entry fees (Willow 100; Fernwood 200) and progress through two opening playoffs, a qualifier playoff, quarterfinals, semifinals and the final champion battle to win coins, Seed Orbs, and badges. After both cups, explore Frostpeak Summit, Stormglass Coast and Shadowfall Sanctum to complete three trials; then challenge the Ancient Guardian for the true ending. Elemental advantages increase damage; elemental resistance reduces it. <b>Elemental progression:</b> Common creatures begin with one elemental affinity and learn three more as they approach their final evolution stage (levels 50, 75 and 100), reaching four total. Rare creatures begin with four affinities and gain one additional element at levels 25, 50, 75 and 100; Fourfold Affinity I, II and III mark their mastery milestones, with all eight unlocked at level 100. Legendary creatures naturally command all eight elements. Any eligible non-Wildcrown creature can Mega Evolve; Mega Evolution grants access to all eight elements regardless of rarity. Creature rarity affects the pace of elemental development, not Mega eligibility. <b>Creature rarity:</b> Common creatures are the original species; Rare creatures carry four of the eight elements and are harder to find. Legendary species are extremely scarce, fixed biome-linked creatures: Verdantyr (deep forests), Pyrothrex (stormlands), Glacivane (ice regions), Thaloryx (deep sea) and Noctyra (shadowlands and caves). Each commands all eight elemental powers — Fire, Water, Ice, Earth, Wood, Grass, Lightning and Shadow — while retaining its own signature traits, stats and moves. Legendary creatures are exceptionally difficult to catch and must be weakened below 15% HP before a Seed Orb can even attempt capture. Wildcrown is not a Legendary creature; it is a singular Creator entity encountered only through its own story and cannot be caught with Seed Orbs. Dense forests and remote biomes have boosted odds, while coastal edges and corners contain rare deep-sea encounters. <b>Evolution:</b> creatures gain attack and defense as they level. Most evolve at level 50; some have a third stage at level 100. Evolution changes their name, appearance color, base stats, and keeps their learned moves. Two-stage species stay in their evolved form after level 50. <b>Creature traits:</b> Mossbit is balanced; Embercub hits hard; Puddlepup is sturdy; Thornlet is defensive; Glimmerfox is quick and has a better chance to dodge. <b>Team slots:</b> begin with 4; unlock slot 5 by visiting Moonstone Ruins, then slot 6 after defeating 3 trainers. Catching is not required to unlock slots.</div>
+</div></main>
+<script>
+(()=> {
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d'),CW=canvas.width,CH=canvas.height,TS=24,MW=120,MH=80;
+const map=[],objects=[],wilds=['Mossbit','Embercub','Puddlepup','Thornlet','Glimmerfox','Frostling','Pebblit','Barkhorn','Sproutle','Voltkit','Shadelet'];
+const species={
+'Mossbit':{element:'Grass',hp:20,power:5,def:2,trait:'Balanced',color:'#6db96d',moves:['Leaf Strike','Vine Lash','Spore Cloud','Nature Gift']},
+'Embercub':{element:'Fire',hp:15,power:8,def:1,trait:'Heavy hitter',color:'#d96c45',moves:['Flare Bite','Flame Burst','Scorch Trail','Fire Guard']},
+'Puddlepup':{element:'Water',hp:27,power:4,def:4,trait:'High stamina',color:'#62b9d6',moves:['Water Jet','Bubble Shield','Tidal Wave','Freshen']},
+'Thornlet':{element:'Wood',hp:22,power:5,def:5,trait:'Tough guard',color:'#7eaa55',moves:['Bramble Bash','Root Snare','Bark Guard','Sap Drain']},
+'Glimmerfox':{element:'Shadow',hp:17,power:6,def:2,trait:'Quick dodge',color:'#c7a0e8',moves:['Quickflash','Night Feint','Gloom Bite','Mirror Veil']},
+'Frostling':{element:'Ice',hp:19,power:6,def:3,trait:'Chilling touch',color:'#9bdff1',moves:['Frost Shard','Cold Snap','Snowblind','Ice Guard']},
+'Pebblit':{element:'Earth',hp:25,power:5,def:5,trait:'Stone armour',color:'#b69b78',moves:['Rock Toss','Quake','Stone Wall','Dust Crush']},
+'Barkhorn':{element:'Wood',hp:28,power:5,def:6,trait:'Living fortress',color:'#7c9c55',moves:['Horn Rush','Root Snare','Bark Guard','Sap Drain']},
+'Sproutle':{element:'Grass',hp:21,power:5,def:3,trait:'Natural healer',color:'#8bd46a',moves:['Leaf Strike','Vine Lash','Spore Cloud','Nature Gift']},
+'Voltkit':{element:'Lightning',hp:16,power:7,def:2,trait:'Fast striker',color:'#efd65d',moves:['Spark Pounce','Chain Bolt','Static Field','Quickstep']},
+'Shadelet':{element:'Shadow',hp:18,power:6,def:3,trait:'Life drainer',color:'#8872b5',moves:['Night Feint','Gloom Bite','Dark Pulse','Drain']},
+'Skyrill':{element:'Lightning',types:['Flying'],hp:19,power:7,def:3,trait:'Aerial scout',color:'#82c8e8',moves:['Gale Peck','Updraft','Spark Pounce','Tailwind']},
+'Mindlet':{element:'Shadow',types:['Psychic'],hp:18,power:7,def:3,trait:'Quiet observer',color:'#b68bd8',moves:['Mind Ripple','Thought Lance','Mirror Veil','Calm Focus']},
+'Carapip':{element:'Wood',types:['Bug'],hp:23,power:5,def:5,trait:'Burrower',color:'#a5a94f',moves:['Shell Bump','Silk Snare','Leaf Nibble','Harden']},
+'Abyssyn':{element:'Water',elements:['Water','Shadow'],types:['Deep Sea'],tier:'Rare',hp:37,power:12,def:9,trait:'Abyssal dweller',color:'#267c91',moves:['Pressure Wave','Dark Current','Abyssal Guard','Undertow']},
+'Lumineth':{element:'Shadow',types:['Mythical'],tier:'Rare',hp:35,power:13,def:7,trait:'Unfamiliar presence',color:'#e8d99a',moves:['Glimmer Pulse','Veilstep','Starfall','Quiet Radiance']},
+'Runebit':{element:'Earth',elements:['Earth','Shadow','Lightning','Ice'],tier:'Rare',hp:34,power:11,def:8,trait:'Ancient resonance',color:'#9b8bca',moves:['Rune Pulse','Stone Arc','Echo Guard','Prism Break']},
+'Verdantyr':{element:'Grass',elements:['Fire','Water','Ice','Earth','Wood','Grass','Lightning','Shadow'],tier:'Legendary',hp:58,power:17,def:14,trait:'Elderheart — restores a little health after each turn',color:'#65c77a',moves:['Worldroot Crush','Verdant Surge','Ancient Bloom','Heartwood Guard']},
+'Pyrothrex':{element:'Fire',elements:['Fire','Water','Ice','Earth','Wood','Grass','Lightning','Shadow'],tier:'Legendary',hp:49,power:22,def:10,trait:'Stormfire — overwhelming offensive force',color:'#f18a43',moves:['Solar Flare','Thunderbrand','Magma Roar','Blazing Ward']},
+'Glacivane':{element:'Ice',elements:['Fire','Water','Ice','Earth','Wood','Grass','Lightning','Shadow'],tier:'Legendary',hp:62,power:15,def:18,trait:'Permafrost — exceptionally resilient',color:'#8ee4f2',moves:['Glacier Lance','Whiteout','Frozen Tide','Absolute Still']},
+'Thaloryx':{element:'Water',elements:['Fire','Water','Ice','Earth','Wood','Grass','Lightning','Shadow'],tier:'Legendary',hp:60,power:19,def:15,trait:'Abyssal pressure — heavy strikes from the deep',color:'#397fbd',moves:['Abyssal Maelstrom','Rift Current','Pressure Break','Drowned Echo']},
+'Noctyra':{element:'Shadow',elements:['Fire','Water','Ice','Earth','Wood','Grass','Lightning','Shadow'],tier:'Legendary',hp:53,power:21,def:13,trait:'Umbral veil — elusive and hard to pin down',color:'#9b78c9',moves:['Eclipse Fang','Dusk Collapse','Void Step','Night Bastion']},
+'Mossprout':{element:'Grass',hp:34,power:9,def:6,trait:'Balanced growth',color:'#4e9e54',moves:['Leaf Strike','Vine Lash','Spore Cloud','Nature Gift']},
+'Verdantitan':{element:'Grass',hp:52,power:14,def:10,trait:'Ancient grove',color:'#287444',moves:['Leaf Strike','Vine Lash','Spore Cloud','Nature Gift']},
+'Cindercat':{element:'Fire',hp:28,power:13,def:4,trait:'Blazing pouncer',color:'#e65b32',moves:['Flare Bite','Flame Burst','Scorch Trail','Fire Guard']},
+'Pyroclast':{element:'Fire',hp:43,power:19,def:8,trait:'Inferno monarch',color:'#b93624',moves:['Flare Bite','Flame Burst','Scorch Trail','Fire Guard']},
+'Rillhound':{element:'Water',hp:43,power:8,def:9,trait:'River guardian',color:'#3d9fc4',moves:['Water Jet','Bubble Shield','Tidal Wave','Freshen']},
+'Tidalord':{element:'Water',hp:61,power:13,def:14,trait:'Tide sovereign',color:'#236b9e',moves:['Water Jet','Bubble Shield','Tidal Wave','Freshen']},
+'Briarback':{element:'Wood',hp:43,power:9,def:12,trait:'Thorn fortress',color:'#527d39',moves:['Bramble Bash','Root Snare','Bark Guard','Sap Drain']},
+'Gloamfox':{element:'Shadow',hp:31,power:12,def:6,trait:'Phantom runner',color:'#9b79c9',moves:['Quickflash','Night Feint','Gloom Bite','Mirror Veil']},
+'Frostmaw':{element:'Ice',hp:36,power:12,def:9,trait:'Glacial hunter',color:'#65bcd8',moves:['Frost Shard','Cold Snap','Snowblind','Ice Guard']},
+'Cragolem':{element:'Earth',hp:48,power:10,def:14,trait:'Mountain wall',color:'#917b61',moves:['Rock Toss','Quake','Stone Wall','Dust Crush']},
+'Bloomhart':{element:'Grass',hp:35,power:9,def:7,trait:'Wild healer',color:'#70bf58',moves:['Leaf Strike','Vine Lash','Spore Cloud','Nature Gift']},
+'Floracrown':{element:'Grass',hp:53,power:14,def:11,trait:'Crown of spring',color:'#399b49',moves:['Leaf Strike','Vine Lash','Spore Cloud','Nature Gift']},
+'Voltrix':{element:'Lightning',hp:30,power:15,def:6,trait:'Storm striker',color:'#e8c83e',moves:['Spark Pounce','Chain Bolt','Static Field','Quickstep']},
+'Umbrawisp':{element:'Shadow',hp:32,power:12,def:7,trait:'Soul siphon',color:'#71609c',moves:['Night Feint','Gloom Bite','Dark Pulse','Drain']},
+'Nightreign':{element:'Shadow',hp:48,power:17,def:10,trait:'Eclipse sovereign',color:'#51406f',moves:['Night Feint','Gloom Bite','Dark Pulse','Drain']}}
+const evolutionChains={Mossbit:['Mossprout','Verdantitan'],Embercub:['Cindercat','Pyroclast'],Puddlepup:['Rillhound','Tidalord'],Thornlet:['Briarback'],Glimmerfox:['Gloamfox'],Frostling:['Frostmaw'],Pebblit:['Cragolem'],Sproutle:['Bloomhart','Floracrown'],Voltkit:['Voltrix'],Shadelet:['Umbrawisp','Nightreign'],Mossprout:['Verdantitan'],Cindercat:['Pyroclast'],Rillhound:['Tidalord'],Bloomhart:['Floracrown'],Umbrawisp:['Nightreign']};
+const ELEMENTS=['Fire','Water','Ice','Earth','Wood','Grass','Lightning','Shadow'];
+const rareNames={sea:['Abyssfin','Coralisk','Murkwhale','Tidefang','Pearlwing'],forest:['Mosswarden','Bramblelynx','Verdantusk','Nightbloom','Rootstalker'],ice:['Glacibex','Rimehart','Frostveil'],storm:['Voltide','Tempestrel','Stormray'],shadow:['Gloamjaw','Dreadmoth','Umbraclaw'],general:['Runebit','Prismane','Wildcrest','Mythling']};
+function creatureElements(c){if(c&&typeof c==='object'&&Array.isArray(c.elements)&&c.elements.length)return c.elements;const sp=species[typeof c==='string'?c:c.name]||species.Mossbit;return sp.elements||[sp.element||'Grass']}
+function creatureTypes(c){if(c&&typeof c==='object'&&Array.isArray(c.types))return c.types;const sp=species[typeof c==='string'?c:c.name]||species.Mossbit;return sp.types||[]}
+function creatureTypeLabel(c){const ts=creatureTypes(c);return ts.length?ts.join(' / '):'Unclassified'}
+function tierLabel(c){const sp=species[typeof c==='string'?c:c.name]||species.Mossbit;return sp.tier||'Common'}
+function registerSpecial(name,elements,tier,habitat){if(name==='Wildcrown')return null;const palette=tier==='Legendary'?'#ffd56a':'#c7a0e8';const base={hp:tier==='Legendary'?42:30,power:tier==='Legendary'?13:9,def:tier==='Legendary'?9:6,trait:tier==='Legendary'?'Eightfold power': 'Fourfold affinity',color:palette,moves:['Prismatic Strike','Elemental Surge','Wild Guard','Life Pulse'],tier,elements:[...elements],element:elements[0],habitat};species[name]=base;return name}
+function generateSpecialCreature(habitat,tier){const pool=rareNames[habitat]||rareNames.general;let name=pool[Math.floor(Math.random()*pool.length)];if(species[name])name=name+' '+(1+Math.floor(Math.random()*99));const elements=tier==='Legendary'?[...ELEMENTS]:[...ELEMENTS].sort(()=>Math.random()-.5).slice(0,4);return registerSpecial(name,elements,tier,habitat)}
+let wildcrownEncountered=false,wildcrownCompanionship=false,passingOfDivinity=false;
+let creatureSerial=0,nurseryPair=null,nurseryEgg=null,hybridDefinitions={},sanctuaryResidents=[],sanctuaryChronicle=[],sanctuarySteps=0;
+let player={x:10,y:10,dir:'down',steps:0},coins=8,clues=[],team=[{name:'Mossbit',level:5,hp:20,max:20,power:5,def:2}],activeIndex=0,balls=5,region='Willow Meadow',battle=null,quest=false,questDone=false,paused=false,frame=0,camera={x:0,y:0},ruinsVisited=false,trainerWins=0,pendingCreatures=[],slotUpgrades=0,badges=[],tournament=null,tournamentWins=0,tournamentRecords={willow:{entries:0,roundWins:0,titles:0,points:0,losses:0},fernwood:{entries:0,roundWins:0,titles:0,points:0,losses:0}},shopOpen=false,currentShop='Market',evolutionStones={},megaStones={},selectedWaitingIndex=-1,trials={frost:false,storm:false,shadow:false},guardianDefeated=false,discoveries=[],rumoursHeard=[],frontierClues=[],frontierGateOpen=false,frontierVaultSearched=false;
+function maxTeam(){return Math.min(8,4+(ruinsVisited?1:0)+(trainerWins>=3?1:0)+slotUpgrades)}
+function makeCreature(name,level){
+ const sp=species[name]||species.Mossbit,lv=Math.max(1,Math.min(100,level));
+ const tier=sp.tier||'Common',mult=tier==='Legendary'?1.8:tier==='Rare'?1.35:1;
+ const max=Math.min(300,Math.round(sp.hp*mult+lv*2.5));
+ const baseElements=[...(sp.elements||[sp.element])];
+ const c={uid:'tw-'+(++creatureSerial),name,level:lv,hp:max,max,power:Math.round(sp.power*mult)+Math.floor((lv-1)/2),def:Math.round(sp.def*mult)+Math.floor((lv-1)/5),element:sp.element,elements:baseElements,affinityBase:[...baseElements],types:[...(sp.types||[])],tier,moves:[...sp.moves],mastery:0};
+ syncAffinityGrowth(c);return c;
+}
+function syncAffinityGrowth(c){
+ if(!c||c.name==='Wildcrown')return;
+ const tier=tierLabel(c),level=c.level||1,base=[...(c.affinityBase||((species[c.name]||species.Mossbit).elements||[(species[c.name]||species.Mossbit).element]))];
+ const ordered=[...base,...ELEMENTS.filter(e=>!base.includes(e))];
+ let gained=0;
+ if(tier==='Common')gained=(level>=100?3:level>=75?2:level>=50?1:0);
+ else if(tier==='Rare')gained=(level>=100?4:level>=75?3:level>=50?2:level>=25?1:0);
+ else if(tier==='Legendary')gained=8;
+ c.affinityBase=base;c.elements=ordered.slice(0,Math.min(8,base.length+gained));c.element=c.elements[0]||c.element;c.mastery=tier==='Rare'?Math.min(3,Math.floor(level/25)):tier==='Common'?Math.min(3,Math.max(0,Math.floor((level-25)/25))):3;
+}
+function rarityMasteryText(c){
+ const tier=tierLabel(c),level=c.level||1;
+ if(tier==='Legendary')return 'Eightfold Dominion · natural mastery';
+ if(tier==='Rare'){const rank=level>=75?3:level>=50?2:level>=25?1:0;return rank?('Fourfold Affinity '+['','I','II','III'][rank]+(level>=100?' · complete':' · developing')):'Fourfold Affinity · dormant';}
+ if(tier==='Common'){const n=creatureElements(c).length;return 'Elemental Growth · '+n+'/4';}
+ return 'Unclassified affinity';
+}
+function rarityDamageBonus(c){const tier=tierLabel(c),rank=Math.min(3,Math.floor((c.level||1)/25));return tier==='Legendary'?(0.18+rank*0.035):tier==='Rare'?(0.08+rank*0.025):0}
+function rarityGuardBonus(c){const tier=tierLabel(c),rank=Math.min(3,Math.floor((c.level||1)/25));return tier==='Legendary'?(0.10+rank*0.025):tier==='Rare'?(0.04+rank*0.015):0}
+const msg=document.getElementById('msg');function say(s){msg.textContent=s}
+function rand(x,y,s=9){let n=Math.sin(x*127.1+y*311.7+s*17.3)*43758.5453;return n-Math.floor(n)}
+// Base world terrain
+for(let y=0;y<MH;y++){map[y]=[];for(let x=0;x<MW;x++){let r=rand(x,y);map[y][x]=r>.82?'tree':r>.67?'grass':'field';if(x<2||y<2||x>MW-3||y>MH-3)map[y][x]='water';}}
+function rect(x,y,w,h,t){for(let yy=y;yy<y+h;yy++)for(let xx=x;xx<x+w;xx++)if(map[yy]?.[xx]!==undefined)map[yy][xx]=t}
+function pathH(x,y,w){rect(x,y,w,2,'path')}function pathV(x,y,h){rect(x,y,2,h,'path')}
+// Connected routes between town, woods, lake, ridge and ruins
+rect(5,5,20,16,'field');rect(8,7,12,8,'town');pathH(10,12,20);pathV(17,12,22);
+pathH(17,31,26);pathV(41,20,13);pathH(41,20,22);pathV(61,20,22);pathH(48,40,15);
+rect(23,24,17,15,'grass');rect(45,22,13,15,'grass');
+rect(65,25,20,19,'field');pathH(61,32,15);pathV(73,32,19);
+rect(75,7,15,14,'field');pathV(82,18,15);pathH(73,31,10);
+rect(8,48,22,19,'field');pathV(17,41,11);pathH(17,52,24);pathV(40,52,12);
+rect(42,48,19,20,'grass');pathH(40,57,22);pathV(60,40,18);
+rect(65,48,24,20,'field');pathH(60,58,18);pathV(78,42,17);
+rect(46,6,16,10,'field');pathH(40,12,14);
+rect(34,4,8,9,'water');rect(35,5,6,7,'water'); // pond
+// clear major paths
+pathH(10,12,30);pathV(17,12,22);pathH(17,31,26);pathV(41,20,13);pathH(41,20,22);pathV(61,20,22);pathH(48,40,15);pathV(17,41,11);pathH(17,52,24);pathV(40,52,12);pathH(40,57,22);pathV(60,40,18);pathH(60,58,18);pathV(78,42,17);pathH(61,32,15);pathV(73,32,19);pathV(82,18,15);pathH(73,31,10);pathH(40,12,14);
+// Endgame regions: Frostpeak Summit, Stormglass Coast and Shadowfall Sanctum.
+rect(72,5,24,18,'field');rect(75,7,18,13,'ice');pathV(82,18,6);pathH(81,20,8);pathV(89,12,8);
+rect(66,45,27,22,'field');rect(69,48,21,16,'sand');pathV(78,42,11);pathH(77,50,12);pathV(87,50,12);
+rect(82,25,16,21,'field');rect(85,28,11,15,'shadow');pathH(81,31,7);pathV(87,31,8);pathH(86,38,9);
+// Forgotten Frontier: a new eastern landmass reached by an old stone causeway.
+rect(96,34,9,9,'field');pathH(96,38,10);rect(104,26,14,28,'field');rect(106,29,10,22,'overgrowth');rect(108,32,9,15,'ruins');rect(109,34,7,11,'mossstone');pathV(109,38,9);pathH(108,44,8);rect(113,40,1,5,'sealed');
+function obj(x,y,type,name,extra={}){objects.push({x,y,type,name,...extra})}
+obj(57,56,'megaLab','Moonlit Local Mega Lab');obj(22,12,'megaLab','Willow Local Mega Lab');obj(112,44,'legendaryMegaLab','Legendary Mega Evolution Institute');obj(24,12,'nursery','Willow Breeding Nursery');obj(64,58,'sanctuary','Wildlands Sanctuary');obj(11,8,'house','Willow Cottage');obj(15,8,'house','Village Home');obj(19,9,'house','Baker’s Cottage');obj(10,15,'house','Garden House');obj(19,15,'house','Supply Hut');obj(14,10,'elder','Elder Rowan');obj(21,15,'shop','Willow Market');obj(12,15,'camp','Willow Camp');obj(23,10,'tournament','Willow Village Cup',{tournamentId:'willow'});obj(59,56,'tournament','Moonlit Mega Masters',{tournamentId:'mega'});obj(114,47,'tournament','Forgotten Frontier Invitational',{tournamentId:'frontier'});
+obj(29,29,'trainer','Juniper');obj(49,28,'trainer','Rook');obj(54,12,'shrine','Old Shrine');
+obj(67,29,'house','Fernwood Cottage');obj(71,29,'house','Forest Lodge');obj(77,30,'house','Herbalist’s Home');obj(67,37,'house','Riverside Home');obj(68,34,'camp','Pine Camp');obj(70,36,'shop','Fernwood Trading Post');obj(73,36,'tournament','Fernwood Elemental Cup',{tournamentId:'fernwood'});obj(85,15,'elder','Ranger Vale');obj(25,58,'trainer','Sage');obj(48,60,'shrine','Moonstone Ruins');obj(82,58,'camp','Riverside Camp');
+obj(22,9,'sign','Town Notice',{text:'WILLOW VILLAGE — North: Old Shrine · East: Whispering Woods · South: Sunfield Road. Willow Cup entry: 100 coins.'});
+obj(87,10,'trial','Frostpeak Trial',{trialId:'frost'});
+obj(91,17,'camp','Frostpeak Shelter');
+obj(84,54,'trial','Stormglass Trial',{trialId:'storm'});
+obj(70,59,'camp','Tidewatch Camp');
+obj(91,35,'trial','Shadowfall Trial',{trialId:'shadow'});
+obj(95,41,'camp','Sanctum Refuge');
+obj(94,31,'guardian','The Ancient Guardian',{trialId:'guardian'});
+// Coins are earned only from wild encounters, trainer battles and tournament battles. No world coin pickups are placed.
+// Walkable dense forest clearings: darker green, encounter-rich, with rare forest species.
+rect(25,25,9,8,'dense');rect(46,23,7,7,'dense');rect(27,34,7,5,'dense');
+// New explorable habitats: a cavern network and an offshore abyssal shelf.
+rect(52,64,10,9,'cave');rect(54,66,6,5,'cave');rect(3,69,9,8,'deepsea');rect(5,71,5,4,'deepsea');
+obj(52,63,'cave','Whispering Cavern');obj(8,68,'sign','Abyssal Shelf Marker',{text:'ABYSSAL SHELF — The current pulls east. Only creatures attuned to the deep can be found beyond the reef.'});
+obj(31,27,'clue','Moss-carved Tablet',{clueId:'forest',text:'The tablet reads: “Where roots drink moonlight, the first star sleeps.”'});
+obj(56,67,'clue','Cavern Echo',{clueId:'cave',text:'An echo repeats: “Stone remembers the sea, and the sea remembers the sky.”'});
+obj(8,73,'clue','Abyssal Inscription',{clueId:'sea',text:'The inscription reads: “When forest, stone and tide are understood, seek the Crown of Wilds.”'});
+obj(60,70,'wildcrownSanctuary','Silent Sanctuary',{sanctuaryId:'wildcrown'});
+// Uncharted landmarks: optional discoveries, not conventional quest-marker errands.
+obj(38,7,'mystery','The Door Without a Building',{mysteryId:'door',journalTitle:'The Door Without a Building',journalText:'A freestanding stone doorway stands among ordinary trees. There are no walls, foundations or tracks leading to it. The stone is weathered on both sides, as if it has stood here for centuries.'});
+obj(33,61,'mystery','The Battlefield of Nobody',{mysteryId:'battlefield',journalTitle:'The Battlefield of Nobody',journalText:'Old weapons and torn banners lie scattered across the valley. There are no graves, bones or records of a battle. The arrangement suggests two forces once faced one another, but the ground bears no signs of a struggle.'});
+obj(90,65,'mystery','The Silent Beacon',{mysteryId:'beacon',journalTitle:'The Silent Beacon',journalText:'A narrow stone tower overlooks the coast. Its lantern chamber is empty, yet sailors in nearby villages disagree about whether they have seen a light here. No two accounts describe the same colour.'});
+obj(20,10,'rumour','Willow Rumour Board',{rumourId:'willow'});
+// Forgotten Frontier discoveries and its optional sealed archive.
+obj(103,38,'sign','Forgotten Frontier Marker',{text:'FORGOTTEN FRONTIER — The old causeway ends here. The stones beyond carry marks from a civilisation absent from every known map.'});
+obj(108,33,'frontierClue','Weathered Survey Slab',{clueId:'survey',text:'A worn survey mark depicts three rings around an empty centre. The same symbol appears on stones farther inland.'});
+obj(115,33,'frontierClue','Collapsed Observatory Dial',{clueId:'observatory',text:'The dial has no stars or constellations. Its pointer is fixed toward the ground, beneath the ruins.'});
+obj(111,48,'frontierClue','Buried Foundation Inscription',{clueId:'foundation',text:'The inscription reads: “The archive opens only when the three directions agree.”'});
+obj(111,42,'frontierMechanism','Threefold Mechanism');
+obj(115,42,'frontierVault','The Buried Archive');
+
+// Keep the established roads walkable through the forest belts.
+pathH(17,31,26);pathV(41,20,13);pathH(41,20,22);pathH(48,40,15);
+const keys={};
+function terrain(x,y){return map[y]?.[x]||'water'}
+function solid(x,y){return ['tree','water','house','sealed'].includes(terrain(x,y))||objects.some(o=>o.x===x&&o.y===y&&['elder','trainer','camp','shrine','sign','shop','tournament','trial','guardian','nursery','sanctuary','megaLab'].includes(o.type))}
+function nearby(){
+ const candidates=objects.filter(o=>Math.abs(o.x-player.x)+Math.abs(o.y-player.y)<=1);
+ const priority={nursery:0,sanctuary:0,megaLab:0,shop:1,tournament:2,elder:3,trainer:4,camp:5,shrine:6,sign:7,house:8};
+ candidates.sort((a,b)=>(Math.abs(a.x-player.x)+Math.abs(a.y-player.y))-(Math.abs(b.x-player.x)+Math.abs(b.y-player.y))||(priority[a.type]??9)-(priority[b.type]??9));
+ return candidates[0]
+}
+
+const megaExperimentSubjects=[
+ {name:'Cindercat',form:'Mega X',stage:'Stable',note:'Heat output has increased dramatically. The subject can regulate its flame without distress.'},
+ {name:'Gloamfox',form:'Mega Y',stage:'Observation',note:'Its shadow mantle responds to movement and creates brief afterimages.'},
+ {name:'Frostmaw',form:'Mega X',stage:'Stable',note:'A crystalline armour pattern formed around its shoulders; temperature remains controlled.'},
+ {name:'Voltrix',form:'Mega Y',stage:'Calibration',note:'Electrical discharge is being measured inside a grounded containment field.'}
+];
+const megaExperimentEggs=[
+ {label:'Incubator A · Mossbit lineage',signal:'Wood / Grass resonance',status:'Stable',note:'A gentle green pulse appears at regular intervals.'},
+ {label:'Incubator B · Embercub lineage',signal:'Fire / Lightning resonance',status:'Fluctuating',note:'The shell warms briefly when nearby Mega Stones are activated.'},
+ {label:'Incubator C · Unknown lineage',signal:'Unclassified multi-element signal',status:'Unresolved',note:'No reliable species identification yet; the lab is deliberately not forcing a scan.'}
+];
+function renderMegaExperiments(){
+ const subjects=document.getElementById('megaExperimentSubjects'),eggs=document.getElementById('megaExperimentEggs');if(!subjects||!eggs)return;
+ subjects.innerHTML='';megaExperimentSubjects.forEach((x,i)=>{const card=document.createElement('div');card.className='facility-card';card.innerHTML='<b>Specimen '+(i+1)+': '+x.name+' · '+x.form+'</b><small>Artificial Mega form · '+x.stage+'<br>'+x.note+'</small>';subjects.appendChild(card)});
+ eggs.innerHTML='';megaExperimentEggs.forEach((x,i)=>{const card=document.createElement('div');card.className='facility-card';card.innerHTML='<b>🥚 '+x.label+'</b><small>Energy signature: '+x.signal+'<br>Incubation status: '+x.status+'<br>'+x.note+'</small>';eggs.appendChild(card)});
+}
+
+let megaLabMode='local';
+function openMegaLab(mode='local'){if(battle)return;megaLabMode=mode;facilityCloseAll();document.getElementById('megaLabPanel').classList.add('open');document.getElementById('megaLabTitle').textContent=mode==='legendary'?'🏛️ Legendary Mega Evolution Institute':'🔬 Local Mega Evolution Lab';document.getElementById('megaLabIntro').textContent=mode==='legendary'?'A specialist facility for Legendary specimens. Their natural eight-element systems require controlled resonance chambers before artificial Mega Evolution can be attempted. Only Legendary creatures may be registered here.':'A regional facility for Common and Rare creatures. Local resonance chambers safely calibrate species-specific Mega Stone X and Y. Legendary specimens must be taken to the specialist institute in the Forgotten Frontier.';renderMegaLab();say(mode==='legendary'?'Legendary Mega Evolution Institute: specialist chambers are available only for Legendary creatures.':'Local Mega Evolution Lab: Common and Rare creatures can be registered here; Legendary creatures require the specialist institute.');}
+function selectedMegaSpecies(){const uid=document.getElementById('megaCreatureSelect').value;return [...team,...pendingCreatures].find(c=>c.uid===uid&&c.name!=='Wildcrown'&&(megaLabMode==='legendary'?tierLabel(c)==='Legendary':tierLabel(c)!=='Legendary'))||null;}
+function megaStoneKey(name,form){return name+'|'+form;}
+function renderMegaLab(){renderMegaExperiments();const sel=document.getElementById('megaCreatureSelect'),prior=sel.value;sel.innerHTML='';const list=[...team,...pendingCreatures].filter(c=>c.name!=='Wildcrown'&&(megaLabMode==='legendary'?tierLabel(c)==='Legendary':tierLabel(c)!=='Legendary'));if(!list.length)sel.add(new Option(megaLabMode==='legendary'?'No Legendary creatures available':'No Common or Rare creatures available',''));list.forEach(c=>sel.add(new Option(c.name+' · Lv '+c.level,c.uid)));if(list.some(c=>c.uid===prior))sel.value=prior;const c=selectedMegaSpecies();const info=document.getElementById('megaLabInfo');if(c){const x=megaStones[megaStoneKey(c.name,'X')]||0,y=megaStones[megaStoneKey(c.name,'Y')]||0;info.innerHTML='<b>'+c.name+' · '+tierLabel(c)+'</b><small>Mega Stone X stored: '+x+' · Mega Stone Y stored: '+y+'<br>Both stones are unique to this species. X and Y produce different Mega forms.</small>';document.getElementById('buyMegaX').disabled=coins<1000;document.getElementById('buyMegaY').disabled=coins<1000;}else{info.textContent=megaLabMode==='legendary'?'Bring a Legendary creature in your team or waiting list to register it here.':'Bring a Common or Rare creature in your team or waiting list to register it here. Legendary creatures are not accepted at local labs.';document.getElementById('buyMegaX').disabled=true;document.getElementById('buyMegaY').disabled=true;}const inv=document.getElementById('megaStoneInventory');inv.innerHTML='';const entries=Object.entries(megaStones).filter(([,n])=>n>0);if(!entries.length)inv.innerHTML='<div class="facility-card"><small>No Mega Stones stored yet.</small></div>';entries.forEach(([key,n])=>{const [name,form]=key.split('|');const card=document.createElement('div');card.className='facility-card';card.innerHTML='<b>'+name+' Mega Stone '+form+'</b><small>Stored quantity: '+n+'</small>';inv.appendChild(card);});}
+function buyMegaStone(form){const c=selectedMegaSpecies();if(!c){say(megaLabMode==='legendary'?'Select a Legendary creature for the specialist lab.':'Select a Common or Rare creature. Legendary creatures require the Forgotten Frontier institute.');return}if(c.name==='Wildcrown'){say('Wildcrown cannot Mega Evolve.');return}if(coins<1000){say('Not enough coins. A species-specific Mega Stone costs 1,000 coins.');return}const key=megaStoneKey(c.name,form);coins-=1000;megaStones[key]=(megaStones[key]||0)+1;renderMegaLab();hud();say('Acquired '+c.name+' Mega Stone '+form+'. It is now stored in the research lab inventory.');}
+function openShop(name){
+ facilityCloseAll();shopOpen=true;currentShop=name;
+ document.getElementById('shopTitle').textContent='🏪 '+name;
+ document.getElementById('shopPanel').classList.add('open');
+ updateShop();
+ say(name+' is open. Choose an item below or press 1–4. Your coins are spent only when a purchase succeeds.');
+}
+function closeShop(){
+ shopOpen=false;document.getElementById('shopPanel').classList.remove('open');
+}
+function updateShop(){
+ document.getElementById('shopCoins').textContent='Available coins: '+coins;
+ document.querySelectorAll('[data-buy]').forEach(b=>{
+  const n=Number(b.dataset.buy),cost={1:6,2:8,3:12,4:30,5:40,6:40,7:40,8:40,9:40,10:40,11:40,12:40}[n];
+  b.disabled=coins<cost||(n===4&&maxTeam()>=8);
+ });
+ const sel=document.getElementById('evolutionStoneSelect');if(sel){const chosen=sel.value;sel.innerHTML='<option value="">Choose an owned evolution stone</option>'+Object.entries(evolutionStones).filter(([k,v])=>v>0).map(([k,v])=>'<option value="'+k+'">'+k+' Stone ×'+v+'</option>').join('');if([...sel.options].some(o=>o.value===chosen))sel.value=chosen;
+ }
+}
+function buyFromShop(n){
+ if(!shopOpen)return;
+ if(n===1){if(coins<6){say('Not enough coins. You need 6 coins for 3 Seed Orbs.');return}coins-=6;balls+=3;say('Purchase complete: 3 Seed Orbs added to your inventory.');}
+ else if(n===2){if(coins<8){say('Not enough coins. A Healing Tonic costs 8.');return}coins-=8;const a=active();a.hp=Math.min(a.max,a.hp+Math.ceil(a.max*.6));say('Purchase complete: Healing Tonic used on '+a.name+'.');}
+ else if(n===3){if(coins<12){say('Not enough coins. A Power Charm costs 12.');return}coins-=12;const a=active();a.power+=2;say('Purchase complete: '+a.name+' gained +2 permanent power.');}
+ else if(n===4){if(maxTeam()>=8){say('Your team capacity is already at the maximum of 8.');return}if(coins<30){say('Not enough coins. A Team Expansion Permit costs 30.');return}coins-=30;slotUpgrades++;say('Purchase complete: team capacity increased to '+maxTeam()+'.');}
+ else if(n>=5&&n<=12){const names={5:'Fire',6:'Water',7:'Ice',8:'Earth',9:'Wood',10:'Leaf',11:'Thunder',12:'Dusk'},stone=names[n];if(coins<40){say('Not enough coins. Evolution Stones cost 40 coins each.');return}coins-=40;evolutionStones[stone]=(evolutionStones[stone]||0)+1;say('Purchase complete: '+stone+' Stone added to your inventory. Choose it below to use it on your active creature.');}
+ updateShop();hud();draw();
+}
+function useEvolutionStone(){const sel=document.getElementById('evolutionStoneSelect'),stone=sel&&sel.value;if(!stone){say('Choose an Evolution Stone from your inventory first.');return}const a=active();if(!a){say('You have no active creature.');return}const chain=evolutionChains[a.name];if(!chain||!chain.length){say(a.name+' has no known stone-triggered evolution. The stone was not consumed.');return}const next=chain[0],sp=species[next],stoneElement={Fire:'Fire',Water:'Water',Ice:'Ice',Earth:'Earth',Wood:'Wood',Leaf:'Grass',Thunder:'Lightning',Dusk:'Shadow'}[stone];const currentElements=creatureElements(a);if(!currentElements.includes(stoneElement)&&!(stone==='Leaf'&&currentElements.includes('Wood'))){say(stone+' Stone does not resonate with '+a.name+'. The stone was not consumed.');return}const old=a.name,oldMax=a.max,ratio=oldMax?a.hp/oldMax:1;a.name=next;const evolved=makeCreature(next,a.level);a.max=evolved.max;a.power=evolved.power;a.def=evolved.def;a.moves=[...evolved.moves];a.element=sp.element;a.elements=sp.elements?[...sp.elements]:undefined;a.types=sp.types?[...sp.types]:undefined;a.tier=sp.tier;a.hp=Math.max(1,Math.min(a.max,Math.round(a.max*ratio)));evolutionStones[stone]--;if(!evolutionStones[stone])delete evolutionStones[stone];say(old+' evolved into '+next+' with the '+stone+' Stone!');updateShop();hud();draw();}
+function updateRegion(){let x=player.x,y=player.y;region=x>=103&&y>=25&&y<55?'Forgotten Frontier':terrain(x,y)==='cave'?'Whispering Cavern':terrain(x,y)==='deepsea'?'Abyssal Shelf':x>=72&&y<23?'Frostpeak Summit':x>=82&&y>=25&&y<47?'Shadowfall Sanctum':x>=66&&x<96&&y>=45&&y<68?'Stormglass Coast':x<25&&y<22?'Willow Village':x<43&&y<42?'Whispering Woods':x>=43&&x<65&&y<43?'Fernwood':x>=65&&x<72&&y<45?'North Ridge':y>=45&&x<41?'Sunfield Road':x>=41&&x<63?'Moonlit Grove':'Riverlands'}
+function move(dx,dy){if(battle||paused)return;player.dir=dx<0?'left':dx>0?'right':dy<0?'up':'down';let nx=player.x+dx,ny=player.y+dy;if(solid(nx,ny)){say('That way is blocked. Look for a path around it.');return}player.x=nx;player.y=ny;player.steps++;advanceFacilities();updateRegion();
+if(!ruinsVisited&&nx>=46&&nx<=51&&ny>=58&&ny<=62){ruinsVisited=true;say('You discovered Moonstone Ruins! Team slot 5 unlocked.');}
+// No scattered coin pickups: rewards come from battles only.
+const t=terrain(nx,ny),nearSea=[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>terrain(nx+dx,ny+dy)==='water');
+const inDeepForest=t==='dense',inWildGrass=t==='grass',inBiome=['ice','sand','shadow','cave','deepsea','overgrowth','ruins','mossstone'].includes(t),coastEncounter=nearSea&&t!=='water'&&!['path','town','house'].includes(t);
+if((inWildGrass&&Math.random()<.19)||(inDeepForest&&Math.random()<.27)||(inBiome&&Math.random()<.18)||(coastEncounter&&Math.random()<.16)){startBattle(null,{habitat:['overgrowth','ruins','mossstone'].includes(t)?'frontier':t==='cave'?'cave':t==='deepsea'?'sea':coastEncounter?'coast':inDeepForest?'forest':t==='ice'?'ice':t==='sand'?'storm':t==='shadow'?'shadow':'general'});}else if(player.steps%14===0)say('The trail continues. Search landmarks, cave passages, the abyssal shelf and the Forgotten Frontier for discoveries.');
+hud();draw()}
+function startBattle(trainer=null,encounter={}){if(!team.some(c=>c.hp>0)){say('Your whole team has fainted. Rest at a camp or in Willow Village before fighting again.');return}
+ const habitat=encounter.habitat||'general';let name,lvl;
+ if(encounter.legendaryName==='Wildcrown'){say('Wildcrown cannot be summoned into battle. It is a singular Creator entity, not a Legendary encounter.');return}
+ if(encounter.legendaryName){name=encounter.legendaryName;lvl=28;}
+ if(encounter.legendaryName){}
+ else if(trainer){name=['Thornlet','Embercub'][Math.floor(Math.random()*2)];lvl=4+Math.floor(Math.random()*3)}
+ else {
+  const roll=Math.random(),rareChance=habitat==='frontier'?.24:habitat==='sea'?.16:habitat==='forest'?.13:habitat==='cave'?.14:habitat==='ice'?.12:habitat==='shadow'?.12:.07;
+  // Legendary species are fixed, biome-linked discoveries, not randomly renamed creatures.
+  const legendaryByHabitat={forest:'Verdantyr',overgrowth:'Verdantyr',storm:'Pyrothrex',ice:'Glacivane',sea:'Thaloryx',shadow:'Noctyra',cave:'Noctyra',frontier:'Noctyra'};
+  if(legendaryByHabitat[habitat]&&roll<.006){name=legendaryByHabitat[habitat];lvl=32+Math.floor(Math.random()*9)}
+  // New creature classifications are independent of elemental affinity and rarity.
+  else if(habitat==='sea'&&roll<.12){name='Abyssyn';lvl=13+Math.floor(Math.random()*12)}
+  else if(['frontier','shadow','cave'].includes(habitat)&&roll<.035){name='Lumineth';lvl=16+Math.floor(Math.random()*12)}
+  else if(roll<rareChance){if(habitat==='frontier'){name='Runebit';lvl=12+Math.floor(Math.random()*9)}else{const rareHab=habitat==='coast'?'sea':habitat;name=generateSpecialCreature(rareNames[rareHab]?rareHab:'general','Rare');lvl=10+Math.floor(Math.random()*16)}}
+  else {const pools={frontier:['Pebblit','Shadelet','Glimmerfox','Mossbit','Frostling','Carapip','Mindlet'],forest:['Mossbit','Thornlet','Barkhorn','Sproutle','Glimmerfox','Carapip','Skyrill','Mindlet'],sea:['Puddlepup','Frostling','Voltkit'],coast:['Puddlepup','Pebblit','Voltkit','Skyrill'],cave:['Pebblit','Shadelet','Glimmerfox','Frostling','Mindlet'],ice:['Frostling','Pebblit','Puddlepup','Skyrill'],storm:['Voltkit','Embercub','Puddlepup','Skyrill'],shadow:['Shadelet','Glimmerfox','Frostling','Mindlet'],general:wilds};const pool=pools[habitat]||wilds;name=pool[Math.floor(Math.random()*pool.length)];lvl=2+Math.floor(Math.random()*5)}
+ }
+ const sp=species[name]||species.Mossbit,tier=sp.tier||'Common',creature=makeCreature(name,lvl);
+ battle={name,level:lvl,hp:creature.max,max:creature.max,trainer,turn:'player',power:creature.power,def:creature.def,element:sp.element,elements:sp.elements||[sp.element],types:sp.types||[],tier,habitat};
+ const el=(sp.elements||[sp.element]).join(' + '),typeText=(sp.types||[]).length?' · Type: '+sp.types.join(' / '):'';
+ say((trainer?'Trainer '+trainer.name+' challenges you! ':'A '+tier.toLowerCase()+' wild '+name+' ('+el+typeText+') appeared! '+(tier!=='Common'?'This is a difficult find! ':'')+sp.trait+'. Use moves 1–4 or E for move 1; C attempts a catch.'));draw();hud()
+}
+function active(){if(!team.length)team.push(makeCreature('Mossbit',5));activeIndex=Math.max(0,Math.min(activeIndex,team.length-1));if(team[activeIndex].hp<=0){const living=team.findIndex(c=>c.hp>0);if(living>=0)activeIndex=living;}return team[activeIndex]}
+function switchToLivingCreature(excludeIndex=-1){const idx=team.findIndex((c,i)=>i!==excludeIndex&&c.hp>0);if(idx>=0){activeIndex=idx;return true}return false}
+function handlePlayerFaint(faintedIndex){
+ const fallen=team[faintedIndex];
+ if(switchToLivingCreature(faintedIndex)){say(fallen.name+' has fainted! '+active().name+' is sent out. Heal fainted creatures at a camp or in town.');hud();draw();return true}
+ battle=null;if(tournament)recordTournamentLoss();
+ say('Your whole team has fainted! You lost the battle. Return to a camp or Willow Village to restore your team. Your creatures keep their levels and are not lost.');
+ hud();draw();return false
+}
+const typeChart={Fire:{Grass:1.5,Wood:1.5,Ice:1.5,Water:.75,Earth:.75,Fire:.75},Water:{Fire:1.5,Earth:1.5,Wood:.75,Grass:.75,Water:.75},Ice:{Grass:1.5,Wood:1.5,Earth:1.25,Fire:.75,Ice:.75,Water:.75},Earth:{Fire:1.5,Lightning:1.5,Ice:1.25,Water:.75,Grass:.75,Wood:.75},Wood:{Water:1.5,Earth:1.25,Fire:.75,Ice:.75,Wood:.75},Grass:{Water:1.5,Earth:1.5,Fire:.75,Ice:.75,Wood:.75,Grass:.75},Lightning:{Water:1.5,Wood:1.25,Earth:.5,Lightning:.75},Shadow:{Shadow:1.25}};
+function typeMult(att,def){const aa=Array.isArray(att)?att:[att],dd=Array.isArray(def)?def:[def];let best=.5;for(const a of aa)for(const d of dd){const m=(typeChart[a]&&typeChart[a][d])||1;if(m>best)best=m}return best}
+function useMove(moveIndex=0){if(!battle)return;if(!team.some(c=>c.hp>0)){handlePlayerFaint(activeIndex);return}const a=active();if(a.hp<=0){say('That creature has fainted. Select a healthy creature before attacking.');return}const asp=species[a.name]||species.Mossbit,esp=species[battle.name]||species.Mossbit;
+ const moveName=(a.moves||asp.moves)[moveIndex%4]||asp.moves[0],multiplier=typeMult(creatureElements(a),creatureElements(battle.name));
+ // Shared, level-aware damage formula keeps both sides on the same scale.
+ // Rare/Legendary creatures are tougher, but rarity never grants immunity.
+ const moveForce=[4,6,5,3][moveIndex%4];
+ const raw=(a.power*0.72+a.level*0.34+moveForce+Math.random()*2.5)*multiplier*(1+rarityDamageBonus(a))-(battle.def||1)*0.62;
+ const dmg=Math.max(1,Math.min(Math.max(1,Math.ceil(battle.max*0.32)),Math.round(raw)));
+ battle.hp=Math.max(0,battle.hp-dmg);
+ let extra=multiplier>1?' It was super effective!':multiplier<1?' It was not very effective.':'';
+ if(tierLabel(a)!=='Common')extra+=' '+tierLabel(a)+' passive: '+Math.round(rarityDamageBonus(a)*100)+'% resonance damage and '+Math.round(rarityGuardBonus(a)*100)+'% damage ward.';
+ if(moveIndex===2&&['Spore Cloud','Sap Drain','Gloom Bite','Drain'].includes(moveName)){const heal=Math.min(a.max-a.hp,Math.max(1,Math.floor(dmg*.3)));a.hp+=heal;extra+=' '+a.name+' recovered '+heal+' HP.'}
+ if(moveIndex===1&&['Cold Snap','Root Snare','Static Field'].includes(moveName))extra+=' The foe was slowed; its next strike is weakened.';
+ if(battle.hp<=0){
+  const wonBattle=battle,wasTournament=!!battle.tournament;
+  if(wasTournament){/* tournament prizes are paid only after the final boss */}
+  else coins+=battle.trainer?20:4;
+  if(battle.trainer&&!wasTournament)trainerWins++;
+  const oldLevel=a.level,oldName=a.name,oldBase=makeCreature(oldName,oldLevel);a.level=Math.min(100,a.level+1);let leveled=makeCreature(a.name,a.level);a.max=leveled.max;a.power=leveled.power+(a.power-oldBase.power);a.def=leveled.def+(a.def-oldBase.def);a.hp=Math.min(a.max,a.hp+Math.max(4,leveled.max-oldBase.max));syncAffinityGrowth(a);
+  const chain=evolutionChains[a.name];let evolveTo=null;const threeStageBases=['Mossbit','Embercub','Puddlepup','Sproutle','Shadelet'];if(chain&&a.level>=50&&threeStageBases.includes(a.name))evolveTo=chain[0];else if(chain&&a.level>=100&&chain.length===1)evolveTo=chain[0];else if(chain&&oldLevel<50&&a.level>=50)evolveTo=chain[0];
+  if(evolveTo){const oldMax=a.max,ratio=oldMax? a.hp/oldMax:1;a.name=evolveTo;const evolved=makeCreature(a.name,a.level);a.max=evolved.max;a.power=evolved.power+(a.power-leveled.power);a.def=evolved.def+(a.def-leveled.def);a.moves=[...evolved.moves];a.element=evolved.element;a.affinityBase=[...(evolved.affinityBase||evolved.elements)];a.tier=evolved.tier;syncAffinityGrowth(a);a.hp=Math.max(1,Math.min(a.max,Math.round(a.max*ratio)));leveled=evolved;say(oldName+' reached level '+a.level+' and evolved into '+evolveTo+'! Attack and defense surged.');}
+  let unlock='';if(!ruinsVisited&&player.x>=46&&player.x<=51&&player.y>=58&&player.y<=62){ruinsVisited=true;unlock=' Team slot 5 unlocked: you explored Moonstone Ruins!'}if(trainerWins===3)unlock+=' Team slot 6 unlocked: you defeated 3 trainers!';
+  battle=null;
+  let tourMsg='';
+  if(wonBattle.trialId){
+   trials[wonBattle.trialId]=true;
+   const prize={frost:25,storm:35,shadow:45}[wonBattle.trialId]||0;
+   coins+=prize;balls+=3;
+   tourMsg=' Trial cleared! You earned '+prize+' coins and 3 Seed Orbs.';
+  }
+  if(wonBattle.endgameBoss){
+   guardianDefeated=true;balls+=12;badges.push('Guardian Sigil');
+   tourMsg=' YOU SAVED WILDLANDS! The Guardian awarded 12 Seed Orbs and the Guardian Sigil. The world is now in post-game exploration mode.';
+  }
+  if(wasTournament){const id=tournament.id,tr=tournamentRecord(id);tr.roundWins++;tr.points+=3;const finalStage=tournamentStages[id].length-1;if(wonBattle.tournamentStage<finalStage){tournament.stage=wonBattle.tournamentStage+1;tourMsg=' Round cleared! You advance to the '+tournamentStages[id][tournament.stage].title.toLowerCase()+'.';say(moveName+' dealt '+dmg+' damage! '+wonBattle.name+' was defeated.'+extra+tourMsg);launchTournamentRound();hud();draw();return}
+   /* Tournament prizes, badges and champion titles are awarded only for defeating the final opponent. */
+   const badge=tournamentBadges[id], [rewardCoins,rewardOrbs]=tournamentRewards[id]||[50,5];
+   coins+=rewardCoins;balls+=rewardOrbs;tournamentWins++;tr.titles++;tr.points+=6;tr.championHolder='You';tr.lastTitleWin=Date.now();if(!badges.includes(badge))badges.push(badge);tournament=null;
+   tourMsg=' ALL-TIME CHAMPION DEFEATED! The regional title passes to you and will be defended in future competitions. Rewards: '+rewardCoins+' coins, '+rewardOrbs+' Seed Orbs, and '+badge+'.';
+  }
+  say(moveName+' dealt '+dmg+' damage! '+wonBattle.name+' was defeated.'+extra+' '+(wasTournament?'':(wonBattle.trainer?'Trainer rewards you with 20 coins.':'You earned 4 coins.'))+' '+a.name+' grew stronger.'+unlock+tourMsg);
+ }else{
+  const enemyMult=typeMult(creatureElements(battle.name),creatureElements(a));
+  const enemyMoveForce=4+Math.floor(Math.random()*3);
+  const enemyRaw=((battle.power||esp.power)*0.72+(battle.level||1)*0.34+enemyMoveForce+Math.random()*2.5)*enemyMult-(a.def||asp.def)*0.62;
+  // Enemy damage scales with its actual stats and level; cap a single hit at 32% max HP.
+  let dmg2=Math.max(1,Math.min(Math.max(1,Math.ceil(a.max*0.32)),Math.round(enemyRaw*(1-rarityGuardBonus(a)))));
+  if((a.name==='Glimmerfox'||a.name==='Voltkit')&&Math.random()<(a.name==='Glimmerfox'?.28:.15))dmg2=0;
+  a.hp=Math.max(0,a.hp-dmg2);if(a.hp<=0){const faintedIndex=activeIndex;say(a.name+' fainted after taking '+dmg2+' damage!');handlePlayerFaint(faintedIndex);return}
+  say(a.name+' used '+moveName+' ('+asp.element+') for '+dmg+' damage.'+extra+' '+(dmg2===0?a.name+' dodged the counterattack!':battle.name+' hit back for '+dmg2+'.'));
+ }
+ hud();draw()
+}
+function attack(){useMove(0)}
+function catchWild(){
+ if(battle&&battle.name==='Wildcrown'){say('Wildcrown cannot be captured. It is not a wild encounter or a Legendary creature; no device can compel its companionship.');return}
+ if(!battle){say('There is no wild creature to catch right now. Walk through tall grass to find one.');return}
+ if(battle.trainer){say('You cannot catch another trainer’s creature!');return}
+ if(balls<=0){say('You are out of Seed Orbs. Find more at camps or in the village.');return}
+ const remaining=battle.hp/battle.max;
+ // Rarity is a real capture barrier: weaken high-tier creatures substantially first.
+ if(battle.tier==='Rare' && remaining>0.35){
+   say('The Seed Orb cannot bind a Rare creature yet! Weaken it below 35% HP first.');return;
+ }
+ if(battle.tier==='Legendary' && remaining>0.15){
+   say('The Legendary creature resists the Seed Orb completely! Weaken it below 15% HP first.');return;
+ }
+ balls--;
+ let catchChance;
+ if(battle.tier==='Legendary'){
+   catchChance=0.003+(1-remaining)*0.03; // 0.3–3.3%
+ }else if(battle.tier==='Rare'){
+   catchChance=0.02+(1-remaining)*0.12; // 2–14%
+ }else{
+   catchChance=Math.min(0.82,0.20+(1-remaining)*0.62);
+ }
+ if(Math.random()<catchChance){
+   const creature=makeCreature(battle.name,battle.level);
+   if(team.length<maxTeam()){team.push(creature);activeIndex=team.length-1;say('Caught '+tierLabel(creature)+' '+creature.name+' ('+creatureElements(creature).join(' + ')+')! It joined your team.');}
+   else{pendingCreatures.push(creature);say('Caught '+tierLabel(creature)+' '+creature.name+'! Your team is full. '+pendingCreatures.length+' creature(s) are now waiting.');}
+   battle=null;
+ }else{
+   say(battle.tier==='Legendary'
+     ?'The Seed Orb shattered under the Legendary creature’s aura! Even weakened, it is extraordinarily difficult to bind.'
+     :battle.tier==='Rare'
+       ?'The Rare creature broke free! Its fourfold elemental nature resists ordinary Seed Orbs.'
+       :'The Seed Orb shook, then popped open! Weaken the creature before trying again.');
+ }
+ hud();draw()
+}
+const tournamentRivals={
+ willow:[
+  {name:'Alder',title:'Willow Cup Champion',team:'Barkhorn · Sproutle',points:30,roundWins:8,titles:3},
+  {name:'Mira',title:'Willow Cup Challenger',team:'Embercub · Glimmerfox',points:24,roundWins:7,titles:2},
+  {name:'Bram',title:'Willow Cup Challenger',team:'Puddlepup · Pebblit',points:18,roundWins:6,titles:1},
+  {name:'Tamsin',title:'Willow Circuit Regular',team:'Thornlet · Mossbit',points:12,roundWins:4,titles:0},
+  {name:'Ivo',title:'Willow Cup Entrant',team:'Voltkit · Mossbit',points:9,roundWins:3,titles:0},
+  {name:'Lena',title:'Willow Cup Entrant',team:'Frostling · Thornlet',points:6,roundWins:2,titles:0},
+  {name:'Oren',title:'Willow Cup Entrant',team:'Pebblit · Sproutle',points:3,roundWins:1,titles:0}
+ ],
+ fernwood:[
+  {name:'Vesper',title:'Fernwood Champion',team:'Voltkit · Frostling',points:36,roundWins:10,titles:4},
+  {name:'Sol',title:'Forest Guardian',team:'Sproutle · Barkhorn',points:27,roundWins:8,titles:2},
+  {name:'Nix',title:'Elemental Duelist',team:'Frostling · Glimmerfox',points:21,roundWins:7,titles:1},
+  {name:'Rowan',title:'Fernwood Circuit Regular',team:'Pebblit · Puddlepup',points:15,roundWins:5,titles:0},
+  {name:'Kael',title:'Fernwood Cup Entrant',team:'Embercub · Voltkit',points:12,roundWins:4,titles:0},
+  {name:'Eira',title:'Fernwood Cup Entrant',team:'Glimmerfox · Frostling',points:9,roundWins:3,titles:0},
+  {name:'Marlow',title:'Fernwood Cup Entrant',team:'Barkhorn · Pebblit',points:3,roundWins:1,titles:0}
+ ]
+};
+tournamentRivals.mega=[{name:'Dr. Vey',title:'Mega Research Champion',team:'Mega Cindercat X · Mega Voltrix Y',points:42,roundWins:12,titles:4},{name:'Rhea',title:'Mega Duelist',team:'Mega Frostmaw X · Mega Gloamfox Y',points:30,roundWins:9,titles:2},{name:'Orin',title:'Lab Director',team:'Mega Voltrix Y · Mega Cindercat X',points:21,roundWins:7,titles:1}];
+tournamentRivals.frontier=[{name:'Warden Kael',title:'Frontier Champion',team:'Verdantyr · Noctyra',points:36,roundWins:11,titles:3},{name:'Eira',title:'Archive Seeker',team:'Noctyra · Abyssyn',points:24,roundWins:8,titles:2},{name:'Marlow',title:'Frontier Regular',team:'Abyssyn · Glacivane',points:15,roundWins:5,titles:1}];
+const allTimeChampions={
+ willow:{name:'Alder the Unbeaten',creature:'Barkhorn',level:18,power:24,def:15,element:'Wood',title:'Willow Village All-Time Champion'},
+ fernwood:{name:'Vesper the Evergreen',creature:'Glimmerfox',level:27,power:34,def:21,element:'Shadow',title:'Fernwood All-Time Champion'},
+ mega:{name:'Dr. Vey — Mega Sovereign',creature:'Cindercat',level:38,power:49,def:30,element:'Fire',megaForm:'X',title:'Moonlit Mega All-Time Champion'},
+ frontier:{name:'Warden Kael — Frontier Legend',creature:'Verdantyr',level:42,power:57,def:36,element:'Grass',title:'Forgotten Frontier All-Time Champion'}
+};
+function tournamentRecord(id){
+ if(!tournamentRecords[id])tournamentRecords[id]={entries:0,roundWins:0,titles:0,points:0,losses:0,audienceVisits:0};
+ const r=tournamentRecords[id];
+ if(!r.championHolder)r.championHolder=allTimeChampions[id]?.name||'Unclaimed';
+ if(id==='willow'&&(r.titles||0)===0&&['Ivo','Ivo the Unbeaten','Ivo — Willow Champion'].includes(r.championHolder))r.championHolder=allTimeChampions.willow.name;
+ return r
+}
+function recordTournamentLoss(){if(!tournament)return;const r=tournamentRecord(tournament.id);r.losses++;tournament=null;}
+function renderLeaderboard(){
+ const id=document.getElementById('leaderboardCup').value, r=tournamentRecord(id), board=(tournamentRivals[id]||[]).map(x=>({...x,player:false}));
+ board.push({name:'You',title:'Player Trainer',team:team.slice(0,3).map(c=>c.name).join(' · ')||'No registered team',points:r.points,roundWins:r.roundWins,titles:r.titles,entries:r.entries,losses:r.losses,player:true});
+ board.sort((a,b)=>b.points-a.points||b.titles-a.titles||b.roundWins-a.roundWins||a.name.localeCompare(b.name));
+ document.getElementById('leaderboardSummary').innerHTML='<b>Your '+(id==='willow'?'Willow Cup':'Fernwood Cup')+' record</b><br><small>'+r.titles+' titles · '+r.roundWins+' round wins · '+r.losses+' losses · '+r.entries+' participant entries · '+(r.audienceVisits||0)+' audience visits · '+r.points+' points · All-time champion: '+r.championHolder+'</small>';
+ const rows=document.getElementById('leaderboardRows');rows.innerHTML='';
+ board.forEach((x,i)=>{const el=document.createElement('div');el.className='leader-row'+(x.player?' player':'');const rank=document.createElement('div');rank.className='leader-rank';rank.textContent='#'+(i+1);const info=document.createElement('div');const name=document.createElement('b');name.textContent=x.name+(x.player?' (You)':'');const detail=document.createElement('small');detail.textContent=x.title+' · '+x.team+(x.player?' · '+x.entries+' entries / '+x.losses+' losses':'');info.append(name,detail);const score=document.createElement('div');score.className='leader-score';score.innerHTML='<b>'+x.points+' pts</b><small>'+x.titles+' titles · '+x.roundWins+' wins</small>';el.append(rank,info,score);rows.appendChild(el)});
+}
+function openLeaderboard(){if(battle)return;facilityCloseAll();document.getElementById('leaderboardPanel').classList.add('open');renderLeaderboard();say('Tournament standings opened. Your record is saved with your adventure.')}
+const tournamentStages={
+ willow:[
+  {name:'Tamsin',title:'Opening Playoff',creature:'Thornlet',level:8},
+  {name:'Oren',title:'Qualifier Playoff',creature:'Puddlepup',level:10},
+  {name:'Mira',title:'Quarterfinal',creature:'Embercub',level:11},
+  {name:'Bram',title:'Semifinal',creature:'Puddlepup',level:14},
+  {name:'Alder',title:'All-Time Championship Final',creature:'Barkhorn',level:18,boss:true}
+ ],
+ fernwood:[
+  {name:'Rowan',title:'Opening Playoff',creature:'Pebblit',level:12},
+  {name:'Kael',title:'Qualifier Playoff',creature:'Embercub',level:14},
+  {name:'Nix',title:'Quarterfinal',creature:'Frostling',level:15},
+  {name:'Sol',title:'Semifinal',creature:'Sproutle',level:19},
+  {name:'Vesper',title:'All-Time Championship Final',creature:'Glimmerfox',level:27,boss:true}
+ ],
+ mega:[
+  {name:'Talon',title:'Opening Mega Playoff',creature:'Cindercat',level:25,megaForm:'Y'},
+  {name:'Rhea',title:'Mega Qualifier Playoff',creature:'Frostmaw',level:28,megaForm:'X'},
+  {name:'Dr. Vey',title:'Mega Quarterfinal',creature:'Cindercat',level:29,megaForm:'X'},
+  {name:'Sable',title:'Mega Semifinal',creature:'Voltrix',level:34,megaForm:'Y'},
+  {name:'Dr. Vey',title:'Mega Championship Final',creature:'Cindercat',level:38,megaForm:'X',boss:true}
+ ],
+ frontier:[
+  {name:'Soren',title:'Opening Frontier Playoff',creature:'Abyssyn',level:28},
+  {name:'Marlow',title:'Frontier Qualifier Playoff',creature:'Abyssyn',level:30},
+  {name:'Nix',title:'Frontier Quarterfinal',creature:'Noctyra',level:32},
+  {name:'Eira',title:'Frontier Semifinal',creature:'Noctyra',level:37},
+  {name:'Warden Kael',title:'Frontier Championship Final',creature:'Verdantyr',level:42,boss:true}
+ ]
+};
+const tournamentPlayoffPairs={
+ willow:{playerOpponent:'Tamsin',npcA:'Oren',npcB:'Lena',},
+ fernwood:{playerOpponent:'Rowan',npcA:'Kael',npcB:'Eira',},
+ mega:{playerOpponent:'Talon',npcA:'Rhea',npcB:'Orin',},
+ frontier:{playerOpponent:'Soren',npcA:'Marlow',npcB:'Eira',}
+};
+const tournamentLabels={willow:'Willow Village Cup',fernwood:'Fernwood Elemental Cup',mega:'Moonlit Mega Masters',frontier:'Forgotten Frontier Invitational'};
+const tournamentFees={willow:100,fernwood:200,mega:700,frontier:500};
+const tournamentBadges={willow:'Willow Badge',fernwood:'Fernwood Crest',mega:'Mega Circuit Emblem',frontier:'Frontier Laureate'};
+const tournamentRewards={willow:[35,5],fernwood:[55,8],mega:[250,12],frontier:[180,10]};
+
+let entryTournamentId=null;
+function tournamentBaseFee(id){return tournamentFees[id]||100}
+function tournamentEntryInfo(id){const fee=tournamentBaseFee(id),record=tournamentRecord(id),participantFee=record.entries>0?Math.ceil(fee/2):fee,audienceFee=Math.ceil(fee*.10);return {fee,participantFee,audienceFee,rematch:record.entries>0}}
+function openTournamentEntry(o){
+ if(tournament||battle){say('Finish your current battle or tournament before entering another.');return}
+ const id=o.tournamentId;
+ if(id==='fernwood'&&!badges.includes('Willow Badge')){say('Fernwood Elemental Cup is reserved for trainers who have earned the Willow Badge.');return}
+ if(id==='mega'&&!badges.includes('Fernwood Crest')){say('Moonlit Mega Masters requires the Fernwood Crest. The lab will not register unqualified trainers.');return}
+ if(id==='frontier'&&!guardianDefeated){say('The Forgotten Frontier Invitational opens only after the Ancient Guardian has been defeated.');return}
+ entryTournamentId=id;facilityCloseAll();
+ const panel=document.getElementById('tournamentEntryPanel');panel.classList.add('open');
+ const info=tournamentEntryInfo(id);
+ document.getElementById('tournamentEntryTitle').textContent='🏆 '+tournamentLabels[id];
+ document.getElementById('tournamentEntryInfo').textContent='Four-trainer entry bracket with two opening playoffs and a qualifier · '+(info.rematch?'Participant rematches cost half price.':'First participant entry costs the full fee.')+' Current all-time champion: '+tournamentRecord(id).championHolder+'. Defeat the reigning champion in the final to claim the title. Audience admission costs 10% of the standard entry fee.';
+ document.getElementById('enterAsParticipant').textContent='Become participant — '+info.participantFee+' coins';
+ document.getElementById('enterAsAudience').textContent='Attend as audience — '+info.audienceFee+' coins';
+ document.getElementById('enterAsParticipant').disabled=false;document.getElementById('enterAsAudience').disabled=false;
+ renderTournamentBracket(id,-1,true);say('Tournament hall opened. Choose participant or audience admission.');
+}
+function renderTournamentBracket(id,stage=-1,audience=false){
+ const host=document.getElementById('tournamentBracketView');if(!host)return;
+ const p=tournamentPlayoffPairs[id], stages=tournamentStages[id];
+ const qualifierWinner=(tournament&&tournament.id===id)?tournament.qualifierOpponent:(audience?(Math.random()<0.5?p.npcA:p.npcB):p.npcA);
+ const rounds=[
+  {name:'OPENING PLAYOFFS · FOUR TRAINERS',matches:[[p.playerOpponent,'You'],[p.npcA,p.npcB]]},
+  {name:'QUALIFIER PLAYOFF',matches:[['You',qualifierWinner]]},
+  {name:'QUARTERFINALS',matches:[['You',stages[2].name]]},
+  {name:'SEMIFINALS',matches:[['You',stages[3].name]]},
+  {name:'FINAL · ALL-TIME CHAMPIONSHIP',matches:[['You',stages[4].name]]}
+ ];
+ const outcomes=[
+  ['You advance',qualifierWinner+' wins the other playoff'],
+  ['You defeat '+qualifierWinner],
+  ['You advance past '+stages[2].name],
+  ['You advance past '+stages[3].name],
+  ['You become champion']
+ ];
+ host.innerHTML='<b>Four-trainer entry bracket · Two opening playoffs → Qualifier → Quarterfinal → Semifinal → Final</b>';
+ rounds.forEach((round,ri)=>{
+  const section=document.createElement('div');section.style.cssText='padding:6px;border:1px solid #ffffff22;border-radius:8px;margin-top:5px';
+  const head=document.createElement('b');head.textContent=round.name;section.appendChild(head);
+  round.matches.forEach((match,mi)=>{
+   const line=document.createElement('div');line.style.cssText='font-size:12px;padding:4px 0;border-top:1px solid #ffffff18';
+   let text=match[0]+' vs '+match[1];
+   if(audience)text+=' · '+outcomes[ri][mi];
+   else if(stage>ri)text+=' · Completed';
+   else if(stage===ri)text+=' · YOUR MATCH';
+   else text+=' · Upcoming';
+   line.textContent=text;section.appendChild(line);
+  });
+  host.appendChild(section);
+ });
+ if(audience){const note=document.createElement('small');note.textContent='Audience view: the four-trainer playoff and later rounds are displayed as a published bracket; NPC results are simulated. Spectators do not fight or earn ranking points.';host.appendChild(note)}
+}
+function enterTournamentAsAudience(){
+ if(!entryTournamentId)return;
+ const id=entryTournamentId,info=tournamentEntryInfo(id);
+ if(coins<info.audienceFee){say('Audience admission costs '+info.audienceFee+' coins. You have '+coins+'.');return}
+ coins-=info.audienceFee;tournamentRecord(id).audienceVisits++;
+ renderTournamentBracket(id,2,true);
+ document.getElementById('tournamentEntryInfo').textContent='Audience admission confirmed. You are watching the completed championship bracket. You did not enter as a competitor.';
+ document.getElementById('enterAsParticipant').disabled=true;document.getElementById('enterAsAudience').disabled=true;
+ say('Audience admission paid: '+info.audienceFee+' coins. You can watch the tournament bracket, but you are not a participant.');hud();
+}
+function beginTournament(){
+ if(!entryTournamentId)return;
+ const id=entryTournamentId,info=tournamentEntryInfo(id);
+ if(coins<info.participantFee){say('Participant entry costs '+info.participantFee+' coins. You have '+coins+'.');return}
+ coins-=info.participantFee;
+ const playoff=tournamentPlayoffPairs[id];
+ const qualifierOpponent=Math.random()<0.5?playoff.npcA:playoff.npcB;
+ tournament={id,stage:0,bracketSize:4,rematch:info.rematch,qualifierOpponent};
+ tournamentRecord(id).entries++;
+ document.getElementById('tournamentEntryPanel').classList.remove('open');
+ document.getElementById('enterAsParticipant').disabled=false;document.getElementById('enterAsAudience').disabled=false;
+ say('Participant entry accepted: '+info.participantFee+' coins paid. '+(info.rematch?'Rematch discount applied. ':'')+'The two opening playoff matches begin. Defeat '+tournamentPlayoffPairs[id].playerOpponent+', then face '+tournament.qualifierOpponent+'—the winner of the other playoff—to earn your quarterfinal place.');launchTournamentRound();hud();
+}
+function launchTournamentRound(){
+ if(!tournament)return;
+ const id=tournament.id;let baseStage={...tournamentStages[id][tournament.stage]};if(tournament.stage===1)baseStage.name=tournament.qualifierOpponent;const isFinal=tournament.stage===tournamentStages[id].length-1;
+ const holder=tournamentRecord(id).championHolder;
+ const champion=isFinal?(holder==='You'?{name:({willow:'Mira the Title Challenger',fernwood:'Sol the Title Challenger',mega:'Rhea — Mega Challenger',frontier:'Eira the Frontier Challenger'})[id],creature:({willow:'Embercub',fernwood:'Frostling',mega:'Frostmaw',frontier:'Noctyra'})[id],level:({willow:22,fernwood:31,mega:40,frontier:44})[id],megaForm:id==='mega'?'Y':null,title:'Title Defence'}:allTimeChampions[id]):null;
+ const stage=champion?{...baseStage,...champion,boss:true}:baseStage;
+ const sp=species[stage.creature]||species.Mossbit;
+ const megaBoost=stage.megaForm?1.85:(isFinal?1.5:1);const baseHp=sp.hp+stage.level*3; battle={name:stage.creature,displayName:stage.megaForm?'Mega '+stage.creature+' '+stage.megaForm:stage.creature,level:stage.level,hp:Math.round(baseHp*megaBoost),max:Math.round(baseHp*megaBoost),trainer:{name:stage.name},tournament:true,tournamentId:id,tournamentStage:tournament.stage,megaOpponent:!!stage.megaForm,megaForm:stage.megaForm||null,power:Math.round((stage.power||sp.power+Math.floor(stage.level/2))*megaBoost),def:Math.round((stage.def||sp.def)*megaBoost),element:stage.element||sp.element,allTimeChampion:isFinal&&holder!=='You',titleDefence:isFinal&&holder==='You'};
+ renderTournamentBracket(id,tournament.stage,false);
+ say((isFinal?(holder==='You'?'TITLE DEFENCE — ':'ALL-TIME CHAMPION — '):stage.title+': ')+stage.name+' enters with '+(stage.megaForm?'Mega '+stage.creature+' '+stage.megaForm:stage.creature)+' ('+(stage.element||sp.element)+')! '+(isFinal?'This is the championship deciding battle. ':'')+(stage.megaForm?'This opponent has boosted Mega stats. ':'')+'Win to claim the regional title.');hud();draw()
+}
+function completeTournamentRound(){
+ if(!tournament)return '';
+ const id=tournament.id,tr=tournamentRecord(id);
+ tournament.stage++;
+ if(tournament.stage<tournamentStages[id].length){const msg=' Match won! You advance to the '+tournamentStages[id][tournament.stage].title.toLowerCase()+'.';launchTournamentRound();return msg}
+ const rewardCoins=id==='willow'?35:55,rewardOrbs=id==='willow'?5:8,badge=id==='willow'?'Willow Badge':'Fernwood Crest';
+ coins+=rewardCoins;balls+=rewardOrbs;tournamentWins++;tr.titles++;tr.points+=6;tr.championHolder='You';tr.lastTitleWin=Date.now();
+ if(!badges.includes(badge))badges.push(badge);
+ tournament=null;
+ return ' Championship won! You earned '+rewardCoins+' coins, '+rewardOrbs+' Seed Orbs and '+badge+'. You are the tournament champion!';
+}
+function startTrial(o){
+ const id=o.trialId||(o.type==='guardian'?'guardian':null);
+ if(id==='guardian'){
+  if(guardianDefeated){say('The Ancient Guardian bows to you. Wildlands is protected, but its trails remain open for exploration.');return}
+  if(tournamentWins<2||!trials.frost||!trials.storm||!trials.shadow){say('The Ancient Guardian is sealed. Win both village tournaments and complete the Frostpeak, Stormglass and Shadowfall trials first.');return}
+  battle={name:'Ancient Guardian',level:22,hp:220,max:220,trainer:{name:'The Ancient Guardian'},endgameBoss:true,power:13,def:7,element:'Shadow'};
+  say('FINAL CHALLENGE: The Ancient Guardian awakens! Bring your strongest elemental team.');hud();draw();return
+ }
+ if(trials[id]){say('You have already completed this trial. The shrine grants you 1 Seed Orb for a rematch preparation.');balls+=1;hud();draw();return}
+ if(!badges.includes('Fernwood Crest')){say('The trial keeper turns you away. Earn the Fernwood Crest before attempting the remote trials.');return}
+ const fee={frost:150,storm:200,shadow:250}[id];
+ if(id==='storm'&&!trials.frost){say('Stormglass Coast is sealed until you complete the Frostpeak Trial.');return}
+ if(id==='shadow'&&(!trials.frost||!trials.storm)){say('Shadowfall Sanctum is sealed until Frostpeak and Stormglass are complete.');return}
+ if(coins<fee){say(o.name+' permit costs '+fee+' coins. You have '+coins+'. Earn coins from wild encounters, trainer battles and tournament battles.');return}
+ coins-=fee;
+ const config={
+  frost:{name:'Glacier Warden',creature:'Frostling',level:16,hp:105,power:10,def:5,element:'Ice'},
+  storm:{name:'Tempest Leviathan',creature:'Voltkit',level:18,hp:125,power:11,def:5,element:'Lightning'},
+  shadow:{name:'Duskbound Sentinel',creature:'Shadelet',level:20,hp:145,power:12,def:6,element:'Shadow'}
+ }[id];
+ battle={name:config.name,level:config.level,hp:config.hp,max:config.hp,trainer:{name:config.name},trialId:id,power:config.power,def:config.def,element:config.element};
+ say('TRIAL BATTLE: '+config.name+' challenges you in '+o.name+'! This is a major battle; type matchups and team rotation matter.');hud();draw()
+}
+const sanctuaryZoneData=[
+ {id:'garden',name:'Verdant Garden',desc:'Woodland and grassland residents; sheltered clearings and abundant forage.'},
+ {id:'highland',name:'Highland Enclosure',desc:'Rocky slopes, open air and cooler high-altitude habitats.'},
+ {id:'cavern',name:'Crystal Cavern',desc:'Dim caves, mineral formations and quiet sheltered spaces.'},
+ {id:'lagoon',name:'Azure Lagoon',desc:'Freshwater pools, streams and aquatic habitats.'},
+ {id:'abyss',name:'Abyssal Habitat',desc:'A deep-water enclosure for creatures adapted to the ocean depths.'},
+ {id:'reserve',name:'Enigmatic Reserve',desc:'A quiet, carefully monitored habitat for unusual and rare residents.'}
+];
+function facilityCloseAll(){['nurseryPanel','sanctuaryPanel','shopPanel','megaLabPanel','leaderboardPanel','tournamentEntryPanel'].forEach(id=>document.getElementById(id).classList.remove('open'));shopOpen=false;}
+function eligibleBreeders(){return [...team,...pendingCreatures].filter(c=>c.name!=='Wildcrown');}
+function fillCreatureSelect(id,includeTeam=true){const el=document.getElementById(id);const list=eligibleBreeders();el.innerHTML='';if(!list.length){el.add(new Option('No eligible creatures',''));return}list.forEach(c=>el.add(new Option(c.name+' · '+creatureElements(c).join('/')+' · '+tierLabel(c),c.uid)));}
+function openNursery(){if(battle)return;facilityCloseAll();document.getElementById('nurseryPanel').classList.add('open');fillCreatureSelect('nurseryParentA');fillCreatureSelect('nurseryParentB');renderNursery();say('Willow Breeding Nursery: select two different creatures. They will be safely housed here until the egg is laid.');}
+function renderNursery(){
+ const a=document.getElementById('nurseryParentA'),b=document.getElementById('nurseryParentB');
+ const status=document.getElementById('nurseryStatus');
+ if(!nurseryPair&&!nurseryEgg){fillCreatureSelect('nurseryParentA');fillCreatureSelect('nurseryParentB');}
+ if(nurseryPair){status.innerHTML='<b>Breeding pair in care</b><small>'+nurseryPair.parents[0].name+' × '+nurseryPair.parents[1].name+' · '+nurseryPair.progress+'/20 active exploration steps until egg-laying. Parents are safely housed by the nursery.</small>';}
+ else if(nurseryEgg){status.innerHTML='<b>Egg in the incubator</b><small>'+nurseryEgg.progress+'/25 active exploration steps until hatching. Parent creatures have been returned to your waiting list.</small>';}
+ else status.innerHTML='<b>Nursery available</b><small>No pair or egg currently in progress. Select two different creatures to begin.</small>';
+ document.getElementById('startBreeding').disabled=!!nurseryPair||!!nurseryEgg||eligibleBreeders().length<2;
+ a.disabled=!!nurseryPair||!!nurseryEgg;b.disabled=!!nurseryPair||!!nurseryEgg;
+}
+function startNurseryBreeding(){
+ if(nurseryPair||nurseryEgg){say('The nursery is already caring for a breeding pair or incubating an egg.');return}
+ const ids=[document.getElementById('nurseryParentA').value,document.getElementById('nurseryParentB').value];
+ if(!ids[0]||!ids[1]||ids[0]===ids[1]){say('Choose two different individual creatures.');return}
+ const a=eligibleBreeders().find(c=>c.uid===ids[0]),b=eligibleBreeders().find(c=>c.uid===ids[1]);
+ if(!a||!b){say('One of those creatures is no longer available. Refresh the nursery list.');return}
+ const selectedTeamCount=ids.filter(uid=>team.some(c=>c.uid===uid)).length;
+ const spareTeam=team.filter(c=>!ids.includes(c.uid)).length;
+ const spareWaiting=pendingCreatures.some(c=>!ids.includes(c.uid));
+ if(spareTeam===0&&!spareWaiting){say('Keep at least one creature available for your active team. Add another creature before sending your entire team to the nursery.');return}
+ const removeByUid=(uid)=>{let i=team.findIndex(c=>c.uid===uid);if(i>=0){const [c]=team.splice(i,1);if(activeIndex>=team.length)activeIndex=Math.max(0,team.length-1);return c}i=pendingCreatures.findIndex(c=>c.uid===uid);if(i>=0)return pendingCreatures.splice(i,1)[0];return null};
+ const pa=removeByUid(ids[0]),pb=removeByUid(ids[1]);if(!pa||!pb){say('The selected pair could not be moved into nursery care.');return}
+ if(!team.length&&pendingCreatures.length){team.push(pendingCreatures.shift());activeIndex=0;}
+ nurseryPair={parents:[pa,pb],progress:0};renderNursery();hud();say(pa.name+' and '+pb.name+' have entered the nursery. The caretaker will look after them while you explore.');
+}
+function makeNurseryOffspring(a,b){
+ const same=a.name===b.name;let childName;
+ if(same||Math.random()<.62)childName=Math.random()<.5?a.name:b.name;
+ else childName='Hybrid '+a.name+' × '+b.name;
+ const elements=[...new Set([...creatureElements(a),...creatureElements(b)].sort(()=>Math.random()-.5))].slice(0,2);
+ const types=[...new Set([...creatureTypes(a),...creatureTypes(b)])].slice(0,2);
+ const parentA=species[a.name]||species.Mossbit,parentB=species[b.name]||species.Mossbit;
+ if(childName.startsWith('Hybrid ')){
+  const def={element:elements[0]||'Grass',elements,types,hp:Math.round((parentA.hp+parentB.hp)/2),power:Math.round((parentA.power+parentB.power)/2),def:Math.round((parentA.def+parentB.def)/2),trait:'Nursery hybrid',color:parentA.color,moves:[...(Math.random()<.5?parentA.moves:parentB.moves)].slice(0,4),tier:(parentA.tier==='Rare'||parentB.tier==='Rare')?'Rare':'Common'};
+  species[childName]=def;hybridDefinitions[childName]=def;
+ }
+ const child=makeCreature(childName,1);child.level=1;child.hp=child.max;child.parentNames=[a.name,b.name];child.generation=Math.max(a.generation||0,b.generation||0)+1;
+ child.elements=elements.length?elements:creatureElements(childName);child.element=child.elements[0];child.types=types;
+ // Inherited move set can contain moves from either parent; no artificial Mega traits are inherited.
+ const moves=[...new Set([...(a.moves||parentA.moves),...(b.moves||parentB.moves)])];child.moves=moves.sort(()=>Math.random()-.5).slice(0,4);
+ return child;
+}
+function advanceFacilities(){
+ if(nurseryPair){nurseryPair.progress++;if(nurseryPair.progress>=20){const [a,b]=nurseryPair.parents;pendingCreatures.push(a,b);nurseryEgg={parents:[a,b],progress:0};nurseryPair=null;say('The nursery has laid an egg from '+a.name+' and '+b.name+'. Both parents have returned to your waiting list; the egg is now incubating.');renderNursery();}}
+ else if(nurseryEgg){nurseryEgg.progress++;if(nurseryEgg.progress>=25){const child=makeNurseryOffspring(nurseryEgg.parents[0],nurseryEgg.parents[1]);pendingCreatures.push(child);const names=nurseryEgg.parents.map(p=>p.name);nurseryEgg=null;say('A new creature hatched at the nursery: '+child.name+'! Offspring inherited traits from '+names.join(' and ')+'. It has been added to your waiting list.');renderNursery();}}
+ sanctuarySteps++;
+ sanctuaryResidents.forEach(r=>{if(sanctuarySteps%5===0)r.hp=Math.min(r.max,r.hp+2)});
+ if(document.getElementById('nurseryPanel').classList.contains('open'))renderNursery();
+ if(document.getElementById('sanctuaryPanel').classList.contains('open')&&sanctuarySteps%5===0)renderSanctuary();
+ if(sanctuarySteps%25===0){const zones=[...new Set(sanctuaryResidents.map(r=>r.zone))];for(const z of zones){const group=sanctuaryResidents.filter(r=>r.zone===z);if(group.length>=2){const x=group[Math.floor(Math.random()*group.length)],y=group.find(c=>c.uid!==x.uid);if(y){const events=['became familiar after spending time together','played together near the habitat boundary','shared a quiet resting place','began recognising one another'];sanctuaryChronicle.unshift(x.name+' and '+y.name+' '+events[Math.floor(Math.random()*events.length)]+'.');sanctuaryChronicle=sanctuaryChronicle.slice(0,10);break}}}}
+}
+function openSanctuary(){if(battle)return;facilityCloseAll();document.getElementById('sanctuaryPanel').classList.add('open');renderSanctuary();say('Wildlands Sanctuary: all six habitat zones are available. The caretaker provides routine care; you can admit or retrieve residents at any time.');}
+function renderSanctuary(){
+ const zones=document.getElementById('sanctuaryZones');zones.innerHTML='';sanctuaryZoneData.forEach(z=>{const n=sanctuaryResidents.filter(r=>r.zone===z.id).length;const el=document.createElement('div');el.className='facility-card';el.innerHTML='<b>'+z.name+' · '+n+' resident(s)</b><small>'+z.desc+'</small>';zones.appendChild(el)});
+ const zoneSelect=document.getElementById('sanctuaryZone');zoneSelect.innerHTML='';sanctuaryZoneData.forEach(z=>zoneSelect.add(new Option(z.name,z.id)));
+ const creatureSelect=document.getElementById('sanctuaryCreature');creatureSelect.innerHTML='';const available=[...team,...pendingCreatures];if(!available.length)creatureSelect.add(new Option('No creatures available',''));available.forEach(c=>creatureSelect.add(new Option(c.name+' · '+creatureElements(c).join('/')+' · '+tierLabel(c),c.uid)));
+ document.getElementById('admitSanctuary').disabled=!available.length;
+ const list=document.getElementById('sanctuaryResidents');list.innerHTML='';if(!sanctuaryResidents.length)list.innerHTML='<div class="facility-card"><small>The sanctuary is currently empty. Its caretaker is ready to welcome residents.</small></div>';
+ sanctuaryResidents.forEach(r=>{const z=sanctuaryZoneData.find(v=>v.id===r.zone)||sanctuaryZoneData[0];const row=document.createElement('div');row.className='facility-entry';const info=document.createElement('span');info.innerHTML='<b>'+r.name+'</b><br><small>'+z.name+' · HP '+r.hp+'/'+r.max+' · '+creatureElements(r).join('/')+'</small>';const btn=document.createElement('button');btn.textContent='Return to waiting';btn.onclick=()=>retrieveSanctuary(r.uid);row.append(info,btn);list.appendChild(row)});
+ const log=document.getElementById('sanctuaryLog');log.innerHTML='';if(!sanctuaryChronicle.length)log.innerHTML='<div class="facility-card"><small>No notable social events recorded yet. Relationships develop naturally as residents spend time together.</small></div>';sanctuaryChronicle.slice(0,6).forEach(t=>{const e=document.createElement('div');e.className='facility-entry';e.textContent=t;log.appendChild(e)});
+}
+function admitSanctuary(){const uid=document.getElementById('sanctuaryCreature').value,zone=document.getElementById('sanctuaryZone').value;if(!uid)return;let c=null,i=team.findIndex(x=>x.uid===uid);if(i>=0){if(team.length<=1&&!pendingCreatures.length){say('Keep at least one creature in your active team. Add another creature before admitting this one.');return}c=team.splice(i,1)[0];if(activeIndex>=team.length)activeIndex=Math.max(0,team.length-1);if(!team.length&&pendingCreatures.length){team.push(pendingCreatures.shift());activeIndex=0}}else{i=pendingCreatures.findIndex(x=>x.uid===uid);if(i>=0)c=pendingCreatures.splice(i,1)[0]}if(!c){say('That creature is no longer available.');return}c.sanctuaryJoined=true;sanctuaryResidents.push({...c,zone});sanctuaryChronicle.unshift(c.name+' was welcomed into the '+(sanctuaryZoneData.find(z=>z.id===zone)?.name||'sanctuary')+'.');sanctuaryChronicle=sanctuaryChronicle.slice(0,10);renderSanctuary();hud();say(c.name+' has moved into the sanctuary. The caretaker will provide routine care.');}
+function retrieveSanctuary(uid){const i=sanctuaryResidents.findIndex(r=>r.uid===uid);if(i<0)return;const c=sanctuaryResidents.splice(i,1)[0];delete c.zone;pendingCreatures.push(c);sanctuaryChronicle.unshift(c.name+' left the sanctuary and returned to your waiting list.');sanctuaryChronicle=sanctuaryChronicle.slice(0,10);renderSanctuary();hud();say(c.name+' returned to your waiting list.');}
+function interact(){if(battle){attack();return}let o=nearby();if(!o){say('Nothing nearby. Walk up to a character, sign, shrine or camp and press E.');return}
+if(o.type==='elder'){if(!quest){quest=true;say(o.name+': Welcome, explorer! The old trails are full of wild creatures. Catch two different kinds and explore the Moonstone Ruins. Your first Mossbit is a gift.');}else if(team.length<2)say(o.name+': Try the tall grass in Whispering Woods. Weaken wild creatures, then use a Seed Orb.');else if(!questDone&&player.x>40&&player.y>45){questDone=true;balls+=3;say(o.name+': You reached the old lands! Reward: 3 Seed Orbs. Coins are earned through battles.');}else say(o.name+': The world is bigger than the roads. Look for clearings and hidden items.');}
+if(o.type==='trainer'){if(o.beaten){say(o.name+': That was a good battle! Keep training.');}else{startBattle(o);o.beaten=true;return}}
+if(o.type==='tournament'){openTournamentEntry(o);return} if(o.type==='trial'||o.type==='guardian'){startTrial(o);return}
+if(o.type==='shop'){openShop(o.name);return}
+if(o.type==='megaLab'){openMegaLab('local');return}if(o.type==='legendaryMegaLab'){if(!guardianDefeated){say('The Legendary Mega Evolution Institute remains sealed. Defeat the Ancient Guardian to gain access to its resonance chambers.');return}openMegaLab('legendary');return}
+if(o.type==='nursery'){openNursery();return}
+if(o.type==='sanctuary'){openSanctuary();return}
+if(o.type==='camp'){team.forEach(c=>c.hp=c.max);balls+=1;say('You rested at '+o.name+'. Your whole team, including fainted creatures, is fully healed and you received 1 Seed Orb.');}
+if(o.type==='shrine'){
+ balls+=1;
+ if(o.name==='Moonstone Ruins'&&!ruinsVisited){ruinsVisited=true;say('The Moonstone Ruins awaken! You found a Seed Orb. Team slot 5 is now unlocked.');}
+ else say('The shrine glows. You found a Seed Orb among the stones.');
+ o.type='empty'
+}
+if(o.type==='sign')say(o.text);
+if(o.type==='rumour'){
+ const rumours=[
+ 'A shepherd claims the mountain shadows sometimes point towards the sun. Nobody has confirmed it.',
+ 'A fisher says the sea near the old coast tower is occasionally calm when every other part of the bay is rough.',
+ 'A traveller insists they passed the same standing stone twice while walking in a straight line.',
+ 'Someone heard distant bells beneath the ground near the old forest road. There is no known settlement there.'
+ ];
+ const unseen=rumours.filter((_,i)=>!rumoursHeard.includes(i));
+ if(unseen.length){const pick=unseen[Math.floor(Math.random()*unseen.length)],idx=rumours.indexOf(pick);rumoursHeard.push(idx);say('Rumour Board: '+pick+' (Rumours heard: '+rumoursHeard.length+'/'+rumours.length+')');}
+ else say('The board is quiet today. Its old notices offer no further explanation.');
+}
+if(o.type==='frontierClue'){if(!frontierClues.includes(o.clueId)){frontierClues.push(o.clueId);say(o.name+': '+o.text+' Frontier inscriptions: '+frontierClues.length+'/3.');}else say(o.text)}
+if(o.type==='frontierMechanism'){if(frontierGateOpen)say('The threefold mechanism remains active. The buried archive is open.');else if(frontierClues.length<3)say('Three recessed rings wait for matching marks. You have found '+frontierClues.length+'/3 inscriptions.');else{frontierGateOpen=true;map[42][113]='path';say('The three inscriptions align. Deep beneath the stones, something unlocks. A passage has opened into the Buried Archive.');}}
+if(o.type==='frontierVault'){if(!frontierGateOpen)say('A sealed stone entrance. Its central mark matches the threefold mechanism.');else if(!frontierVaultSearched){frontierVaultSearched=true;discoveries.push('buried-archive');balls+=3;coins+=25;say('The Buried Archive opens. Inside: 3 Seed Orbs and 25 coins, preserved beside a map fragment showing land beyond the known frontier. The archive is now recorded in your Uncharted Chronicles.');}else say('The archive is quiet. Only the map fragment remains.');}
+if(o.type==='mystery'){
+ if(!discoveries.includes(o.mysteryId)){
+  discoveries.push(o.mysteryId);
+  say('You found '+o.name+'. Nothing explains why it is here. A note has been added to the Uncharted Chronicles.');
+ }else say(o.journalText+' You have already recorded this place.');
+}
+
+if(o.type==='clue'){if(!clues.includes(o.clueId)){clues.push(o.clueId);say(o.name+': '+o.text+' Clues discovered: '+clues.length+'/3.');o.type='empty'}else say(o.text)}
+if(o.type==='wildcrownSanctuary'){
+ if(clues.length<3){say('The sanctuary gives no response. The forest, cavern and abyssal inscriptions remain incomplete ('+clues.length+'/3).');}
+ else if(wildcrownCompanionship){say('The sanctuary is quiet. The Passing of Divinity has already occurred; no second Wildcrown can appear.');}
+ else if(!wildcrownEncountered){wildcrownEncountered=true;if(!discoveries.includes('wildcrown-sighting'))discoveries.push('wildcrown-sighting');say('Something watches from beyond the ancient stones. A presence unlike any creature you have encountered appears at a distance, then vanishes. It does not battle, approach for capture, or submit to a Seed Orb. The Uncharted Chronicles record a sighting, not an explanation.');}
+ else{say('Only silence remains at the sanctuary. Wildcrown does not answer repeated visits or attempts to force an encounter. Its companionship cannot be obtained through a spawn point, battle or capture device.');}
+}
+if(o.type==='house')say('Supply Hut: The village keeper is away, but you find a spare Seed Orb.');hud();draw()}
+function keepSelectedCreature(){
+ if(battle){say('Finish the battle before changing your team.');return}
+ if(!pendingCreatures.length){say('No creatures are waiting. Catch one first.');return}
+ selectedWaitingIndex=0;addOrSwapWaitingCreature()
+}
+function addOrSwapWaitingCreature(){
+ if(battle){say('Finish the battle before changing your team.');return}
+ if(!pendingCreatures.length){say('No creatures are waiting. Catch one first.');return}
+ let wi=selectedWaitingIndex>=0&&selectedWaitingIndex<pendingCreatures.length?selectedWaitingIndex:0;
+ const fresh=pendingCreatures.splice(wi,1)[0];
+ if(team.length<maxTeam()){
+  team.push(fresh);activeIndex=team.length-1;
+  say(fresh.name+' joined your active team. '+pendingCreatures.length+' creature(s) remain in the waiting list.');
+ }else{
+  const old=team[activeIndex];team[activeIndex]=fresh;
+  pendingCreatures.push(old);
+  say(fresh.name+' joined your team, replacing '+old.name+'. '+old.name+' was moved to the waiting list, so no creature was lost.');
+ }
+ selectedWaitingIndex=-1;hud();draw()
+}
+function releaseSelectedCreature(){
+ if(battle){say('Finish the battle before changing your team.');return}
+ if(team.length<=1){say('Keep at least one creature on your team.');return}
+ const old=team[activeIndex];team.splice(activeIndex,1);pendingCreatures.push(old);activeIndex=Math.max(0,Math.min(activeIndex,team.length-1));
+ say(old.name+' moved to the waiting list instead of being deleted. You can bring it back whenever you want.');
+ hud();draw()
+}
+function hud(){const keepBtn=document.getElementById('keepCreature'),releaseBtn=document.getElementById('releaseCreature');keepBtn.disabled=!pendingCreatures.length||!!battle;releaseBtn.disabled=!!battle||team.length<=1;keepBtn.textContent=pendingCreatures.length?'Keep next waiting ('+pendingCreatures[0].name+') · '+pendingCreatures.length+' waiting':'Keep next waiting';releaseBtn.textContent='Release selected creature';const moveBox=document.getElementById('moves');moveBox.style.display=battle?'flex':'none';const asp=species[active().name]||species.Mossbit;[...moveBox.querySelectorAll('button')].forEach((b,i)=>b.textContent=(i+1)+' · '+asp.moves[i]);document.getElementById('region').textContent=region;document.getElementById('team').textContent='Team: '+team.length+'/'+maxTeam()+' · Orbs '+balls;document.getElementById('coins').textContent='Coins: '+coins+' · Badges: '+(badges.length?badges.join(', '):'None');let a=active();document.getElementById('party').textContent=a.name+' Lv.'+a.level+' · HP '+a.hp+'/'+a.max;const roster=document.getElementById('roster');roster.innerHTML='';team.forEach((m,i)=>{const b=document.createElement('button');b.className='member'+(i===activeIndex?' active':'');const trait=(species[m.name]||species.Mossbit).trait;
+ b.innerHTML='<b>'+(i===activeIndex?'▶ ':'')+m.name+' · Lv.'+m.level+'</b><small>'+creatureElements(m).join('+')+' · '+(creatureTypes(m).length?'Type: '+creatureTypes(m).join('/'): 'No special type')+' · '+tierLabel(m)+' · '+trait+' · '+rarityMasteryText(m)+' · HP '+m.hp+'/'+m.max+' · ATK '+m.power+' · DEF '+(m.def||1)+'</small>';b.onclick=()=>{if(battle){say('Finish the battle before selecting a creature.');return}activeIndex=i;hud();draw();say(m.name+' selected. The Release button will release this creature.');};roster.appendChild(b);});
+ const waiting=document.getElementById('waitingList');waiting.innerHTML='';
+ pendingCreatures.forEach((m,i)=>{const card=document.createElement('button');card.className='member'+(i===selectedWaitingIndex?' waiting-selected':'');const sp=species[m.name]||species.Mossbit;card.innerHTML='<b>'+(i===selectedWaitingIndex?'▶ ':'')+m.name+' · Lv.'+m.level+'</b><small>'+creatureElements(m).join('+')+' · '+(creatureTypes(m).length?'Type: '+creatureTypes(m).join('/'): 'No special type')+' · '+tierLabel(m)+' · '+rarityMasteryText(m)+' · HP '+m.hp+'/'+m.max+' · ATK '+m.power+' · DEF '+m.def+'</small>';card.onclick=()=>{selectedWaitingIndex=i;hud();say(m.name+' selected from waiting list. Choose a team member, then click Add / swap selected waiting creature.');};waiting.appendChild(card);});
+ const allElements=['Fire','Water','Ice','Earth','Wood','Grass','Lightning','Shadow'];
+ const covered=[...new Set(team.flatMap(m=>creatureElements(m)))];
+ const missing=allElements.filter(e=>!covered.includes(e));
+ document.getElementById('elementCoverage').textContent='Element coverage: '+covered.length+'/8 elements in active team ('+covered.join(', ')+'). '+(missing.length?'Still missing: '+missing.join(', ')+'.':'All eight elements represented!');
+ document.getElementById('swapWaiting').disabled=!pendingCreatures.length||!!battle;
+ document.getElementById('swapWaiting').textContent=selectedWaitingIndex>=0&&pendingCreatures[selectedWaitingIndex]?'Add / swap: '+pendingCreatures[selectedWaitingIndex].name:'Add / swap selected waiting creature';
+}
+function drawTile(x,y,sx,sy){let t=terrain(x,y),colors={field:'#9acb76',grass:'#58a54b',path:'#c9b57e',water:'#59b7d0',tree:'#367746',town:'#b5d28a',house:'#ddc99a',ice:'#a8dce8',sand:'#d7c18a',shadow:'#51405f',dense:'#164d2b',cave:'#34313d',deepsea:'#17617b',overgrowth:'#315f3b',ruins:'#77766b',mossstone:'#596b55',sealed:'#343a3b'};ctx.fillStyle=colors[t]||'#9acb76';ctx.fillRect(sx,sy,TS,TS);
+if(t==='cave'){ctx.fillStyle='#171923';ctx.fillRect(sx+2,sy+2,TS-4,TS-4);ctx.fillStyle='#686273';ctx.fillRect(sx+4,sy+4,5,4);ctx.fillRect(sx+15,sy+15,6,5);ctx.fillStyle='#9b83c8';ctx.fillRect(sx+11,sy+8,2,5)}
+if(t==='deepsea'){ctx.fillStyle='#0e4668';ctx.fillRect(sx+2,sy+2,TS-4,TS-4);ctx.fillStyle='#39a7b5';ctx.fillRect(sx+5,sy+7,10,2);ctx.fillRect(sx+13,sy+17,7,2);}
+if(t==='overgrowth'){ctx.fillStyle='#234a31';ctx.fillRect(sx+2,sy+2,TS-4,TS-4);ctx.strokeStyle='#6b9854';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(sx+4,sy+20);ctx.lineTo(sx+11,sy+8);ctx.lineTo(sx+19,sy+18);ctx.stroke();}
+if(t==='ruins'||t==='mossstone'||t==='sealed'){ctx.fillStyle=t==='sealed'?'#202a2b':t==='mossstone'?'#46584a':'#62645f';ctx.fillRect(sx+2,sy+2,TS-4,TS-4);ctx.strokeStyle=t==='sealed'?'#c1a66c':'#a6a28b';ctx.lineWidth=1;ctx.strokeRect(sx+4,sy+4,TS-8,TS-8);if(t==='sealed'){ctx.beginPath();ctx.moveTo(sx+7,sy+7);ctx.lineTo(sx+17,sy+17);ctx.moveTo(sx+17,sy+7);ctx.lineTo(sx+7,sy+17);ctx.stroke();}else{ctx.fillStyle='#829174';ctx.fillRect(sx+5,sy+5,4,3);ctx.fillRect(sx+15,sy+15,5,3);}}
+if(t==='dense'){ctx.fillStyle='#103e23';ctx.fillRect(sx+1,sy+1,TS-2,TS-2);ctx.fillStyle='#236537';ctx.beginPath();ctx.arc(sx+7,sy+8,7,0,7);ctx.arc(sx+17,sy+14,8,0,7);ctx.fill();ctx.fillStyle='#0b321c';ctx.fillRect(sx+10,sy+15,4,9)}
+if(t==='grass'){ctx.strokeStyle='#3e8e40';ctx.beginPath();ctx.moveTo(sx+5,sy+17);ctx.lineTo(sx+7,sy+9);ctx.moveTo(sx+15,sy+20);ctx.lineTo(sx+17,sy+11);ctx.stroke()}
+if(t==='path'){ctx.fillStyle='#b3a06e';if(rand(x,y)>.5)ctx.fillRect(sx+5,sy+5,3,2)}
+if(t==='water'){ctx.strokeStyle='#8cdbec';ctx.beginPath();ctx.moveTo(sx+3,sy+8);ctx.lineTo(sx+19,sy+8);ctx.stroke()}
+if(t==='tree'){ctx.fillStyle='#245f38';ctx.beginPath();ctx.arc(sx+12,sy+10,11,0,7);ctx.fill();ctx.fillStyle='#755039';ctx.fillRect(sx+9,sy+14,6,10)}
+if(t==='town'){ctx.fillStyle='#a8cb7d';ctx.fillRect(sx,sy,TS,TS);ctx.fillStyle='#e8d9a9';ctx.fillRect(sx+3,sy+3,4,4);if(rand(x,y,21)>.72){ctx.fillStyle='#e9c6c2';ctx.fillRect(sx+5,sy+6,3,3);ctx.fillStyle='#fff0d0';ctx.fillRect(sx+6,sy+5,2,2);ctx.fillStyle='#477d43';ctx.fillRect(sx+4,sy+9,5,2)}if(rand(x,y,28)>.86){ctx.fillStyle='#d4bd8a';ctx.fillRect(sx+13,sy+13,5,4);ctx.fillStyle='#b49b6b';ctx.fillRect(sx+14,sy+14,3,2)}}
+}
+function drawCreatureSprite(g,name,cx,cy,size){
+ const sp=species[name]||species.Mossbit,el=sp.element||'Grass',col=sp.color||'#6db96d';
+ const dark=shadeColor(col,-38),light=shadeColor(col,35),unit=size/100;
+ g.save();g.translate(cx,cy);g.scale(unit,unit);
+ // ground shadow
+ g.fillStyle='#07130c88';g.beginPath();g.ellipse(0,35,39,9,0,0,Math.PI*2);g.fill();
+ // tail varies by creature family
+ g.fillStyle=dark;g.strokeStyle='#17251c';g.lineWidth=3;g.beginPath();
+ if(el==='Water'){g.moveTo(25,12);g.quadraticCurveTo(62,0,51,-25);g.quadraticCurveTo(77,-4,42,25);}
+ else if(el==='Fire'||el==='Lightning'){g.moveTo(25,12);g.quadraticCurveTo(60,10,55,-16);g.lineTo(67,-34);g.lineTo(69,-8);g.quadraticCurveTo(74,15,38,28);}
+ else if(el==='Ice'){g.moveTo(25,12);g.lineTo(54,-4);g.lineTo(64,-22);g.lineTo(61,4);g.lineTo(39,27);}
+ else {g.moveTo(25,12);g.quadraticCurveTo(62,-2,53,-24);g.quadraticCurveTo(76,2,42,29);}
+ g.closePath();g.fill();g.stroke();
+ // feet and body
+ g.fillStyle=dark;g.strokeStyle='#17251c';g.lineWidth=3;
+ for(const x of [-20,12]){g.beginPath();g.roundRect(x-7,18,15,20,5);g.fill();g.stroke();}
+ g.fillStyle=col;g.beginPath();g.ellipse(0,9,34,27,-.08,0,Math.PI*2);g.fill();g.stroke();
+ g.fillStyle=light;g.beginPath();g.ellipse(-7,17,18,12,0,0,Math.PI*2);g.fill();
+ // head
+ g.fillStyle=col;g.beginPath();g.arc(-8,-17,25,0,Math.PI*2);g.fill();g.stroke();
+ // ears / horns by species
+ g.fillStyle=dark;g.beginPath();
+ if(name.toLowerCase().includes('fox')||name==='Voltkit'||name==='Shadelet'||name==='Glimmerfox'){
+   g.moveTo(-28,-29);g.lineTo(-35,-58);g.lineTo(-9,-39);g.closePath();g.moveTo(3,-38);g.lineTo(18,-59);g.lineTo(20,-27);g.closePath();
+ }else if(el==='Wood'||el==='Grass'){
+   g.moveTo(-26,-32);g.lineTo(-36,-61);g.lineTo(-7,-42);g.closePath();g.moveTo(2,-39);g.lineTo(21,-62);g.lineTo(20,-27);g.closePath();
+ }else if(el==='Earth'){
+   g.moveTo(-27,-29);g.lineTo(-35,-49);g.lineTo(-12,-39);g.closePath();g.moveTo(5,-38);g.lineTo(25,-50);g.lineTo(17,-23);g.closePath();
+ }else if(el==='Ice'||el==='Lightning'){
+   g.moveTo(-25,-30);g.lineTo(-31,-57);g.lineTo(-6,-39);g.closePath();g.moveTo(2,-38);g.lineTo(20,-56);g.lineTo(17,-25);g.closePath();
+ }else {g.ellipse(-28,-30,9,15,-.5,0,Math.PI*2);g.ellipse(12,-32,9,15,.5,0,Math.PI*2);}
+ g.fill();g.stroke();
+ // elemental crest / shell
+ if(el==='Wood'||el==='Grass'){g.fillStyle='#b3df70';g.beginPath();g.ellipse(2,-52,7,14,-.55,0,Math.PI*2);g.fill();g.stroke();}
+ if(el==='Fire'){g.fillStyle='#ffb34c';g.beginPath();g.moveTo(34,-3);g.lineTo(48,-27);g.lineTo(47,-5);g.lineTo(58,-14);g.lineTo(50,9);g.closePath();g.fill();}
+ if(el==='Water'){g.fillStyle='#b8f1ff';g.beginPath();g.arc(35,-13,6,0,Math.PI*2);g.fill();}
+ if(el==='Earth'){g.fillStyle='#8a765e';g.beginPath();g.arc(5,1,19,Math.PI,Math.PI*2);g.fill();g.stroke();}
+ if(el==='Ice'){g.strokeStyle='#e7fbff';g.lineWidth=4;g.beginPath();g.moveTo(31,-13);g.lineTo(43,-29);g.moveTo(35,-9);g.lineTo(51,-10);g.stroke();}
+ if(el==='Lightning'){g.fillStyle='#fff29a';g.beginPath();g.moveTo(31,-29);g.lineTo(43,-29);g.lineTo(35,-13);g.lineTo(47,-14);g.lineTo(27,8);g.lineTo(33,-9);g.lineTo(23,-8);g.closePath();g.fill();}
+ if(el==='Shadow'){g.fillStyle='#d9c8ff';g.beginPath();g.arc(38,-15,5,0,Math.PI*2);g.fill();}
+ // eyes, muzzle, smile
+ g.fillStyle='#fff';g.fillRect(-20,-22,9,12);g.fillRect(1,-22,9,12);g.fillStyle='#17252b';g.fillRect(-17,-19,4,7);g.fillRect(4,-19,4,7);
+ g.fillStyle='#f8e7d4';g.beginPath();g.ellipse(-7,-7,12,8,0,0,Math.PI*2);g.fill();g.fillStyle='#382b2b';g.fillRect(-9,-10,4,3);g.fillRect(-5,-2,5,2);
+ g.restore();
+}
+function shadeColor(hex,amt){let h=hex.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');let n=parseInt(h,16),r=Math.max(0,Math.min(255,(n>>16)+amt)),gg=Math.max(0,Math.min(255,((n>>8)&255)+amt)),b=Math.max(0,Math.min(255,(n&255)+amt));return '#'+[r,gg,b].map(v=>v.toString(16).padStart(2,'0')).join('')}
+function draw(){ctx.clearRect(0,0,CW,CH);camera.x=Math.max(0,Math.min(MW*TS-CW,player.x*TS-CW/2));camera.y=Math.max(0,Math.min(MH*TS-CH,player.y*TS-CH/2));
+let x0=Math.floor(camera.x/TS),y0=Math.floor(camera.y/TS);for(let yy=0;yy<Math.ceil(CH/TS)+1;yy++)for(let xx=0;xx<Math.ceil(CW/TS)+1;xx++){let x=x0+xx,y=y0+yy;drawTile(x,y,xx*TS-(camera.x%TS),yy*TS-(camera.y%TS))}
+for(const o of objects){let sx=o.x*TS-camera.x,sy=o.y*TS-camera.y;if(sx<-TS||sy<-TS||sx>CW||sy>CH)continue;
+if(o.type==='elder'||o.type==='trainer'){ctx.fillStyle=o.type==='elder'?'#7950a4':'#c46d42';ctx.fillRect(sx+5,sy+8,14,15);ctx.fillStyle='#efc79e';ctx.fillRect(sx+6,sy+1,12,11);ctx.fillStyle=o.type==='elder'?'#ddd':'#633b2e';ctx.fillRect(sx+4,sy,16,5);ctx.fillStyle='#152e33';ctx.fillRect(sx+8,sy+5,2,2);ctx.fillRect(sx+15,sy+5,2,2)}
+if(o.type==='trial'){ctx.fillStyle='#746a8d';ctx.fillRect(sx+4,sy+7,16,16);ctx.fillStyle=o.trialId==='frost'?'#a7e9f2':o.trialId==='storm'?'#f1d95c':'#b58be5';ctx.beginPath();ctx.moveTo(sx+12,sy-2);ctx.lineTo(sx+20,sy+7);ctx.lineTo(sx+12,sy+13);ctx.lineTo(sx+4,sy+7);ctx.closePath();ctx.fill();ctx.fillStyle='#f6f2d0';ctx.fillRect(sx+10,sy+4,4,8)}
+if(o.type==='guardian'){ctx.fillStyle='#4c385f';ctx.fillRect(sx+2,sy+6,20,17);ctx.fillStyle='#d7b5f3';ctx.beginPath();ctx.moveTo(sx+12,sy-4);ctx.lineTo(sx+20,sy+7);ctx.lineTo(sx+12,sy+14);ctx.lineTo(sx+4,sy+7);ctx.closePath();ctx.fill();ctx.fillStyle='#fff0a8';ctx.fillRect(sx+7,sy+10,3,3);ctx.fillRect(sx+14,sy+10,3,3)}
+if(o.type==='nursery'){ctx.fillStyle='#e3d7ad';ctx.fillRect(sx+2,sy+7,20,16);ctx.fillStyle='#7b9a68';ctx.beginPath();ctx.moveTo(sx,sy+8);ctx.lineTo(sx+12,sy-3);ctx.lineTo(sx+24,sy+8);ctx.fill();ctx.fillStyle='#fff0c7';ctx.beginPath();ctx.ellipse(sx+12,sy+15,4,6,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#9d7a45';ctx.stroke();}
+if(o.type==='sanctuary'){ctx.fillStyle='#8eaa70';ctx.fillRect(sx+2,sy+10,20,13);ctx.fillStyle='#426f4a';ctx.fillRect(sx+5,sy+5,14,8);ctx.fillStyle='#b8d58b';ctx.beginPath();ctx.arc(sx+12,sy+7,7,Math.PI,Math.PI*2);ctx.fill();ctx.fillStyle='#e6e5b2';ctx.fillRect(sx+10,sy+13,4,10);}
+if(o.type==='shop'){ctx.fillStyle='#f0d49a';ctx.fillRect(sx+1,sy+8,22,15);ctx.fillStyle='#9b5a3d';ctx.beginPath();ctx.moveTo(sx-1,sy+9);ctx.lineTo(sx+12,sy+1);ctx.lineTo(sx+25,sy+9);ctx.fill();ctx.fillStyle='#4c7e9c';ctx.fillRect(sx+3,sy+11,5,5);ctx.fillRect(sx+16,sy+11,5,5);ctx.fillStyle='#7b472c';ctx.fillRect(sx+9,sy+14,6,9);ctx.fillStyle='#fff2c4';ctx.fillRect(sx+3,sy+3,18,3);ctx.fillStyle='#8c6239';ctx.fillRect(sx+4,sy+4,16,2)}
+if(o.type==='tournament'){ctx.fillStyle='#e8d6ad';ctx.fillRect(sx+1,sy+7,22,16);ctx.fillStyle='#b34e3d';ctx.beginPath();ctx.moveTo(sx-1,sy+8);ctx.lineTo(sx+12,sy-2);ctx.lineTo(sx+25,sy+8);ctx.fill();ctx.fillStyle='#f7e6b8';ctx.fillRect(sx+4,sy+10,16,3);ctx.fillStyle='#8c4c32';ctx.fillRect(sx+9,sy+14,6,9);ctx.fillStyle='#f5d45d';ctx.fillRect(sx+10,sy+2,4,5);ctx.fillStyle='#fff4ce';ctx.fillRect(sx+5,sy+11,3,2);ctx.fillRect(sx+16,sy+11,3,2)}
+if(o.type==='camp'){ctx.fillStyle='#77513a';ctx.fillRect(sx+4,sy+14,16,7);ctx.fillStyle='#ffb547';ctx.beginPath();ctx.moveTo(sx+12,sy+2);ctx.lineTo(sx+20,sy+16);ctx.lineTo(sx+4,sy+16);ctx.fill()}
+if(o.type==='shrine'){ctx.fillStyle='#8f86bb';ctx.fillRect(sx+3,sy+3,18,19);ctx.fillStyle='#d8e6ff';ctx.fillRect(sx+8,sy+7,8,8)}
+if(o.type==='clue'||o.type==='hunt'||o.type==='wildcrownSanctuary'||o.type==='cave'){ctx.fillStyle=o.type==='hunt'?'#f5d36b':o.type==='clue'?'#8de0c2':'#847b9c';ctx.beginPath();ctx.arc(sx+12,sy+12,8,0,Math.PI*2);ctx.fill();ctx.fillStyle='#17232a';ctx.font='bold 12px system-ui';ctx.fillText(o.type==='hunt'?'★':o.type==='wildcrownSanctuary'?'✧':o.type==='clue'?'?':'⌂',sx+8,sy+16)}
+if(o.type==='frontierClue'||o.type==='frontierMechanism'||(o.type==='frontierVault'&&frontierGateOpen)){ctx.fillStyle=o.type==='frontierClue'?'#b8c5a0':o.type==='frontierMechanism'?'#d2b66c':'#8f9bba';ctx.fillRect(sx+3,sy+4,18,18);ctx.strokeStyle='#343a37';ctx.strokeRect(sx+3,sy+4,18,18);ctx.fillStyle='#27332d';ctx.font='bold 13px system-ui';ctx.fillText(o.type==='frontierClue'?'⌘':o.type==='frontierMechanism'?'◈':'▣',sx+7,sy+18)}
+if(o.type==='sign'){ctx.fillStyle='#815532';ctx.fillRect(sx+10,sy+8,4,16);ctx.fillStyle='#e3c78c';ctx.fillRect(sx+2,sy+2,20,12)}
+
+if(o.type==='house'){ctx.fillStyle='#d8c79c';ctx.fillRect(sx+2,sy+5,20,18);ctx.fillStyle=o.name.includes('Fernwood')||o.name.includes('Forest')||o.name.includes('Herbalist')||o.name.includes('Riverside')?'#477b55':'#c96551';ctx.beginPath();ctx.moveTo(sx,sy+7);ctx.lineTo(sx+12,sy-2);ctx.lineTo(sx+24,sy+7);ctx.fill();ctx.fillStyle='#6fa4b5';ctx.fillRect(sx+4,sy+9,5,5);ctx.fillRect(sx+15,sy+9,5,5);ctx.fillStyle='#805238';ctx.fillRect(sx+10,sy+14,5,9);ctx.fillStyle='#f4e7c7';ctx.fillRect(sx+11,sy+17,1,1)}
+}
+let psx=player.x*TS-camera.x,psy=player.y*TS-camera.y;ctx.fillStyle='#235ed0';ctx.fillRect(psx+5,psy+9,14,14);ctx.fillStyle='#f1c7a0';ctx.fillRect(psx+6,psy+2,12,11);ctx.fillStyle='#51352b';ctx.fillRect(psx+4,psy,16,5);ctx.fillStyle='#1a2934';ctx.fillRect(psx+8,psy+6,2,2);ctx.fillRect(psx+15,psy+6,2,2);
+ctx.fillStyle='#12251fbb';ctx.fillRect(12,12,220,29);ctx.fillStyle='#fff';ctx.font='bold 13px system-ui';ctx.fillText(region.toUpperCase()+'  ·  '+player.x+','+player.y,21,31);
+if(battle){ctx.fillStyle='#10221ddf';ctx.fillRect(80,65,640,365);ctx.strokeStyle='#bde6a2';ctx.lineWidth=2;ctx.strokeRect(80,65,640,365);ctx.fillStyle='#f0ffe8';ctx.font='bold 21px system-ui';ctx.fillText(battle.trainer?'TRAINER BATTLE':(battle.tier||'Common').toUpperCase()+' WILD ENCOUNTER',108,102);ctx.fillStyle='#d4f0e8';ctx.font='18px system-ui';ctx.fillText(battle.name+'  Lv.'+battle.level+' · '+(battle.elements||[battle.element]).join('+')+(battle.types&&battle.types.length?' · '+battle.types.join('/'):''),110,145);ctx.fillStyle='#34554a';ctx.fillRect(110,164,250,16);ctx.fillStyle='#8ee17b';ctx.fillRect(110,164,250*battle.hp/battle.max,16);ctx.fillStyle='#fff';ctx.font='14px system-ui';ctx.fillText('HP '+battle.hp+'/'+battle.max,110,199);
+ctx.fillStyle='#19372b';ctx.fillRect(450,125,235,150);ctx.strokeStyle='#8bbf83';ctx.strokeRect(450,125,235,150);drawCreatureSprite(ctx,battle.name,565,220,118);ctx.fillStyle='#fff';ctx.font='15px system-ui';ctx.fillText('Your '+active().name+'  Lv.'+active().level,110,250);ctx.fillText('HP '+active().hp+'/'+active().max,110,274);drawCreatureSprite(ctx,active().name,400,320,84);ctx.fillStyle='#b6e2ff';ctx.fillText('E / Interact: Spark attack',110,325);ctx.fillText('C / Throw Seed Orb: attempt to catch',110,352);ctx.fillText('Seed Orbs: '+balls,110,379)}
+if(paused){ctx.fillStyle='#07140edc';ctx.fillRect(0,0,CW,CH);ctx.fillStyle='#fff';ctx.font='bold 30px system-ui';ctx.textAlign='center';ctx.fillText('PAUSED',CW/2,CH/2);ctx.textAlign='left'}
+}
+function renderChronicles(){
+ const names={
+  door:'The Door Without a Building',
+  battlefield:'The Battlefield of Nobody',
+  beacon:'The Silent Beacon',
+  'buried-archive':'The Buried Archive',
+  'wildcrown-sighting':'The Silent Sanctuary — Wildcrown'
+ };
+ const texts={
+  door:'A freestanding stone doorway with no building around it. Its purpose remains unknown.',
+  battlefield:'Weapons and banners remain, but there are no graves, remains or reliable records.',
+  beacon:'An empty coastal tower surrounded by contradictory stories of a light nobody can explain.',
+ 'buried-archive':'A sealed archive beneath the Forgotten Frontier. Its map fragment points beyond the surveyed lands.',
+ 'wildcrown-sighting':'A distant presence appeared at the sanctuary and vanished. No battle or capture took place. Its nature remains unknown.'
+ };
+ const root=document.getElementById('chronicleEntries');
+ root.innerHTML='';
+ Object.keys(names).forEach(id=>{
+  const found=discoveries.includes(id),el=document.createElement('div');
+  el.className='chronicle-entry';
+  el.innerHTML='<b>'+(found?'✦ ':'? ')+names[id]+'</b><small>'+(found?texts[id]:'Not yet discovered. No location is marked on your map.')+'</small>';
+  root.appendChild(el);
+ });
+ document.getElementById('chronicleSummary').textContent=discoveries.length+' recorded discoveries · '+rumoursHeard.length+' village rumours heard · '+frontierClues.length+'/3 Frontier inscriptions. Some mysteries may never have confirmed explanations.';
+}
+function toggleChronicles(force){
+ const panel=document.getElementById('chroniclePanel');
+ const open=typeof force==='boolean'?force:panel.style.display==='none';
+ panel.style.display=open?'block':'none';
+ if(open){renderChronicles();say('The Uncharted Chronicles record what you have found, not what the world refuses to explain.');}
+}
+function save(){localStorage.setItem('wildlands-save',JSON.stringify({player,coins,team,activeIndex,balls,quest,questDone,clues,objects,ruinsVisited,trainerWins,pendingCreatures,slotUpgrades,badges,tournamentWins,trials,guardianDefeated,discoveries,rumoursHeard,frontierClues,frontierGateOpen,frontierVaultSearched,wildcrownEncountered,wildcrownCompanionship,passingOfDivinity,creatureSerial,nurseryPair,nurseryEgg,hybridDefinitions,sanctuaryResidents,sanctuaryChronicle,sanctuarySteps,tournamentRecords,evolutionStones,megaStones}));say('Adventure saved in this browser.')}
+function load(){try{let d=JSON.parse(localStorage.getItem('wildlands-save'));if(!d)throw 0;player=d.player;coins=d.coins;team=(d.team||[]).filter(m=>m.name!=='Wildcrown').map(m=>({...m,level:Math.min(100,m.level),max:Math.min(300,m.max),hp:Math.min(m.hp,Math.min(300,m.max))}));if(!team.length)team=[makeCreature('Mossbit',5)];activeIndex=d.activeIndex||0;balls=d.balls;quest=d.quest;questDone=d.questDone;clues=d.clues||[];ruinsVisited=!!d.ruinsVisited;trainerWins=d.trainerWins||0;pendingCreatures=(d.pendingCreatures||(d.pendingCreature?[d.pendingCreature]:[])).filter(m=>m.name!=='Wildcrown');wildcrownEncountered=!!d.wildcrownEncountered||!!(d.team||[]).some(m=>m.name==='Wildcrown')||!!(d.pendingCreatures||[]).some(m=>m.name==='Wildcrown');wildcrownCompanionship=!!d.wildcrownCompanionship;passingOfDivinity=!!d.passingOfDivinity;creatureSerial=d.creatureSerial||0;evolutionStones=d.evolutionStones||{};megaStones=d.megaStones||{};nurseryPair=d.nurseryPair||null;nurseryEgg=d.nurseryEgg||null;hybridDefinitions=d.hybridDefinitions||{};Object.assign(species,hybridDefinitions);sanctuaryResidents=d.sanctuaryResidents||[];sanctuaryChronicle=d.sanctuaryChronicle||[];sanctuarySteps=d.sanctuarySteps||0;selectedWaitingIndex=-1;slotUpgrades=d.slotUpgrades||0;badges=d.badges||[];tournamentWins=d.tournamentWins||0;tournamentRecords=d.tournamentRecords||{};for(const tid of ['willow','fernwood','mega','frontier'])tournamentRecords[tid]=Object.assign({entries:0,roundWins:0,titles:0,points:0,losses:0},tournamentRecords[tid]||{});/* Remove legacy early-award badges unless a recorded championship title proves they were earned. */for(const [tid,badge] of Object.entries(tournamentBadges)){if((tournamentRecords[tid].titles||0)<1)badges=badges.filter(b=>b!==badge)}trials=d.trials||{frost:false,storm:false,shadow:false};guardianDefeated=!!d.guardianDefeated;discoveries=d.discoveries||[];rumoursHeard=d.rumoursHeard||[];frontierClues=d.frontierClues||[];frontierGateOpen=!!d.frontierGateOpen;frontierVaultSearched=!!d.frontierVaultSearched;tournament=null;objects.splice(0,objects.length,...(d.objects||[]).filter(o=>!(o.type==='item'&&/coin pouch/i.test(o.name||''))&&!(o.type==='hunt'||o.name==='Crown of Wilds')));
+for(const extra of [{x:57,y:56,type:'megaLab',name:'Moonlit Local Mega Lab'},{x:22,y:12,type:'megaLab',name:'Willow Local Mega Lab'},{x:112,y:44,type:'legendaryMegaLab',name:'Legendary Mega Evolution Institute'},{x:59,y:56,type:'tournament',name:'Moonlit Mega Masters',tournamentId:'mega'},{x:114,y:47,type:'tournament',name:'Forgotten Frontier Invitational',tournamentId:'frontier'},{x:24,y:12,type:'nursery',name:'Willow Breeding Nursery'},{x:64,y:58,type:'sanctuary',name:'Wildlands Sanctuary'},{x:52,y:63,type:'cave',name:'Whispering Cavern'},{x:8,y:68,type:'sign',name:'Abyssal Shelf Marker',text:'ABYSSAL SHELF — The current pulls east. Only creatures attuned to the deep can be found beyond the reef.'},{x:31,y:27,type:'clue',name:'Moss-carved Tablet',clueId:'forest',text:'The tablet reads: “Where roots drink moonlight, the first star sleeps.”'},{x:56,y:67,type:'clue',name:'Cavern Echo',clueId:'cave',text:'An echo repeats: “Stone remembers the sea, and the sea remembers the sky.”'},{x:8,y:73,type:'clue',name:'Abyssal Inscription',clueId:'sea',text:'The inscription reads: “When forest, stone and tide are understood, seek the Crown of Wilds.”'},{x:60,y:70,type:'wildcrownSanctuary',name:'Silent Sanctuary',sanctuaryId:'wildcrown'},
+{x:38,y:7,type:'mystery',name:'The Door Without a Building',mysteryId:'door',journalTitle:'The Door Without a Building',journalText:'A freestanding stone doorway stands among ordinary trees. There are no walls, foundations or tracks leading to it.'},
+{x:33,y:61,type:'mystery',name:'The Battlefield of Nobody',mysteryId:'battlefield',journalTitle:'The Battlefield of Nobody',journalText:'Old weapons and torn banners lie scattered across the valley. There are no graves, bones or records of a battle.'},
+{x:90,y:65,type:'mystery',name:'The Silent Beacon',mysteryId:'beacon',journalTitle:'The Silent Beacon',journalText:'A narrow stone tower overlooks the coast. Its lantern chamber is empty, yet sailors disagree about whether they have seen a light here.'},
+{x:20,y:10,type:'rumour',name:'Willow Rumour Board',rumourId:'willow'},
+{x:103,y:38,type:'sign',name:'Forgotten Frontier Marker',text:'FORGOTTEN FRONTIER — The old causeway ends here. The stones beyond carry marks from a civilisation absent from every known map.'},
+{x:108,y:33,type:'frontierClue',name:'Weathered Survey Slab',clueId:'survey',text:'A worn survey mark depicts three rings around an empty centre. The same symbol appears on stones farther inland.'},
+{x:115,y:33,type:'frontierClue',name:'Collapsed Observatory Dial',clueId:'observatory',text:'The dial has no stars or constellations. Its pointer is fixed toward the ground, beneath the ruins.'},
+{x:111,y:48,type:'frontierClue',name:'Buried Foundation Inscription',clueId:'foundation',text:'The inscription reads: “The archive opens only when the three directions agree.”'},
+{x:111,y:42,type:'frontierMechanism',name:'Threefold Mechanism'},
+{x:115,y:42,type:'frontierVault',name:'The Buried Archive'}])if(!objects.some(o=>o.name===extra.name))objects.push(extra);
+ if(frontierGateOpen){map[42][113]='path';}
+ team=team.map(m=>{if(m.tier&&m.elements)registerSpecial(m.name,m.elements,m.tier,m.habitat||'general');const fresh=makeCreature(m.name,m.level);return {...fresh,uid:m.uid||fresh.uid,affinityBase:m.affinityBase||fresh.affinityBase,elements:fresh.elements,element:fresh.element,types:m.types||fresh.types,moves:m.moves||fresh.moves,generation:m.generation,parentNames:m.parentNames,hp:Math.min(m.hp,fresh.max),power:Math.max(fresh.power,m.power||fresh.power),def:Math.max(fresh.def,m.def||fresh.def)}});pendingCreatures=pendingCreatures.map(m=>{if(m.tier&&m.elements)registerSpecial(m.name,m.elements,m.tier,m.habitat||'general');const fresh=makeCreature(m.name,m.level);return {...fresh,uid:m.uid||fresh.uid,affinityBase:m.affinityBase||fresh.affinityBase,elements:fresh.elements,element:fresh.element,types:m.types||fresh.types,moves:m.moves||fresh.moves,generation:m.generation,parentNames:m.parentNames,hp:Math.min(m.hp,fresh.max),power:Math.max(fresh.power,m.power||fresh.power),def:Math.max(fresh.def,m.def||fresh.def)}});sanctuaryResidents=sanctuaryResidents.map(m=>({...m,uid:m.uid||'tw-'+(++creatureSerial)}));if(nurseryPair?.parents)nurseryPair.parents=nurseryPair.parents.map(m=>({...m,uid:m.uid||'tw-'+(++creatureSerial)}));if(nurseryEgg?.parents)nurseryEgg.parents=nurseryEgg.parents.map(m=>({...m,uid:m.uid||'tw-'+(++creatureSerial)}));battle=null;updateRegion();hud();draw();localStorage.setItem('wildlands-save',JSON.stringify({player,coins,team,activeIndex,balls,quest,questDone,clues,objects,ruinsVisited,trainerWins,pendingCreatures,slotUpgrades,badges,tournamentWins,trials,guardianDefeated,discoveries,rumoursHeard,frontierClues,frontierGateOpen,frontierVaultSearched,wildcrownEncountered,wildcrownCompanionship,passingOfDivinity,creatureSerial,nurseryPair,nurseryEgg,hybridDefinitions,sanctuaryResidents,sanctuaryChronicle,sanctuarySteps,tournamentRecords,evolutionStones,megaStones}));renderNursery();renderSanctuary();say(wildcrownEncountered?'Adventure loaded. Legacy Wildcrown capture data was removed; the singular entity is now protected from capture and duplicate spawning.':'Adventure loaded. Welcome back!')}catch(e){say('No saved adventure found yet.')}}
+window.addEventListener('keydown',e=>{let k=e.key.toLowerCase();if(shopOpen){if(k>='1'&&k<='4'){e.preventDefault();buyFromShop(Number(k));return}if(k==='escape'||k==='e'){closeShop();return}return}if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k))e.preventDefault();if(k==='p'){paused=!paused;draw();return}if(k==='j'){toggleChronicles();return}if(k>='1'&&k<='4'&&battle){useMove(Number(k)-1);return}if(k==='e'||k==='enter'){interact();return}if(k==='c'){catchWild();return}if(k==='h'){if(['Willow Village','Sunfield Road','Riverlands'].includes(region)){team.forEach(c=>c.hp=c.max);say('Your team is fully healed.')}else say('Rest at a campfire in the world or return to a village to heal.');hud();draw();return}
+if(k==='arrowup'||k==='w')move(0,-1);if(k==='arrowdown'||k==='s')move(0,1);if(k==='arrowleft'||k==='a')move(-1,0);if(k==='arrowright'||k==='d')move(1,0)});
+document.querySelectorAll('[data-move]').forEach(b=>b.addEventListener('click',()=>{let d=b.dataset.move;move(d==='left'?-1:d==='right'?1:0,d==='up'?-1:d==='down'?1:0)}));
+document.getElementById('interact').onclick=interact;document.querySelectorAll('[data-moveidx]').forEach(b=>b.onclick=()=>useMove(Number(b.dataset.moveidx)));document.getElementById('catch').onclick=catchWild;document.getElementById('keepCreature').onclick=keepSelectedCreature;document.getElementById('swapWaiting').onclick=addOrSwapWaitingCreature;document.getElementById('releaseCreature').onclick=releaseSelectedCreature;document.getElementById('heal').onclick=()=>{if(nearby()?.type==='camp'||region==='Willow Village'){team.forEach(c=>c.hp=c.max);balls+=1;say('Rested! Your whole team, including fainted creatures, is fully healed. You received 1 Seed Orb.')}else say('Find a campfire or return to Willow Village to rest.');hud();draw()};
+document.querySelectorAll('[data-buy]').forEach(b=>b.addEventListener('click',()=>buyFromShop(Number(b.dataset.buy))));document.getElementById('closeShop').onclick=closeShop;document.getElementById('useEvolutionStone').onclick=useEvolutionStone;document.getElementById('closeMegaLab').onclick=()=>document.getElementById('megaLabPanel').classList.remove('open');document.getElementById('refreshMegaLab').onclick=renderMegaLab;document.getElementById('megaCreatureSelect').onchange=renderMegaLab;document.getElementById('buyMegaX').onclick=()=>buyMegaStone('X');document.getElementById('buyMegaY').onclick=()=>buyMegaStone('Y');document.getElementById('save').onclick=save;document.getElementById('load').onclick=load;
+document.getElementById('leaderboards').onclick=openLeaderboard;document.getElementById('closeLeaderboard').onclick=()=>document.getElementById('leaderboardPanel').classList.remove('open');document.getElementById('refreshLeaderboard').onclick=renderLeaderboard;document.getElementById('leaderboardCup').onchange=renderLeaderboard;document.getElementById('enterAsParticipant').onclick=beginTournament;document.getElementById('enterAsAudience').onclick=enterTournamentAsAudience;document.getElementById('closeTournamentEntry').onclick=()=>{document.getElementById('tournamentEntryPanel').classList.remove('open');document.getElementById('enterAsParticipant').disabled=false;document.getElementById('enterAsAudience').disabled=false;};document.getElementById('startBreeding').onclick=startNurseryBreeding;document.getElementById('closeNursery').onclick=()=>document.getElementById('nurseryPanel').classList.remove('open');document.getElementById('admitSanctuary').onclick=admitSanctuary;document.getElementById('closeSanctuary').onclick=()=>document.getElementById('sanctuaryPanel').classList.remove('open');document.getElementById('chronicles').onclick=()=>toggleChronicles();document.getElementById('closeChronicles').onclick=()=>toggleChronicles(false);
+function loop(){frame++;if(!paused&&!battle){/* gentle animation counter */}draw();requestAnimationFrame(loop)}
+team.forEach(c=>{if(!c.uid)c.uid='tw-'+(++creatureSerial)});pendingCreatures.forEach(c=>{if(!c.uid)c.uid='tw-'+(++creatureSerial)});renderNursery();renderSanctuary();updateRegion();hud();loop();
+})();
+</script></body></html>
