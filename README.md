@@ -36,6 +36,39 @@ It is a world of ecosystems, forgotten histories, strange occurrences and things
 - 📜 **Uncover mysteries:** Record discoveries in the Uncharted Chronicles.
 - 👑 **Find the truth:** Follow the clues leading towards the Forgotten Frontier and the mystery of Wildcrown.
 
+---
+
+## A glimpse into Wildlands
+
+*These are scenes from the game itself. Each image captures a different part of the journey.*
+
+### Willow Village
+Your journey begins here, among quiet paths, familiar faces and the first hints of a much larger world.
+
+![Willow Village](screenshots/Willow%20Village.jpg)
+
+### Wild encounters
+Creatures roam beyond the village. Some may become companions; others are simply part of the wilderness.
+
+![Common Wild Encounter](screenshots/Common%20Wild%20Encounter.jpg)
+
+### Trainer battles
+Build your team, choose your moves and test your creatures against other trainers.
+
+![Trainer Battle](screenshots/Trainer%20Battle.jpg)
+
+### Uncharted Chronicles
+Keep track of discoveries, rumours and mysteries that may not have clear explanations.
+
+![Uncharted Chronicles](screenshots/Uncharted%20Chronicles.jpg)
+
+### The Abyssal Shelf
+The current pulls east. Only creatures attuned to the deep can be found beyond the reef.
+
+![Abyssal Shelf](screenshots/An%20exploration%20scene%20featuring%20ruins%20or%20a%20hidden%20location.jpg)
+
+---
+
 ### A world that keeps its secrets
 
 Some locations are marked on maps. Others aren't.
